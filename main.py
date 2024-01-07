@@ -18,6 +18,7 @@ import math
 import traceback
 from datetime import datetime
 
+time.sleep(2)
 token = '6964908043:AAE0fSVJGwNKOQWAwQRH6QDfuuXZx2EQNME'
 class ExHandler(telebot.ExceptionHandler):
     def handle(self, exc):
@@ -205,7 +206,7 @@ def handle_text(message, txt):
             bot.send_message(message.chat.id, 'Хохла спросить забыли',reply_to_message_id=message.message_id)
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
-        elif 'all' in text_for_reaction:
+        elif '@all' in txt.lower().split():
             slavoneki = [5417937009,460507186,783003689,540255407,523497602,503671007,448214297,729883976,738931917]
             if message.from_user.id in slavoneki:
                 slavoneki.remove(message.from_user.id)
@@ -231,7 +232,7 @@ def handle_text(message, txt):
         elif 'зелебоба' in text_for_reaction or 'зелень' in text_for_reaction or 'зеленский' in text_for_reaction or 'зеленський' in text_for_reaction:
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELGOplmDc9SkF-ZnVsdNl4vhvzZEo7BQAC5SwAAkrDgEr_AVwN_RkClDQE',reply_to_message_id=message.message_id)
 
-@bot.message_handler(func=lambda message: True, content_types=['photo','video','document','text','animation'])
+@bot.message_handler(func=lambda message: True, content_types=['photo','video','document','text','animation','sticker'])
 def msg_text(message):
     if message.text is not None:
         handle_text(message, message.text)
