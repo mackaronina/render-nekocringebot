@@ -40,6 +40,7 @@ nekosas = {
 SERVICE_CHATID = -1001694727085
 NEKOSLAVIA_CHATID = -1001268892138
 ME_CHATID = 738931917
+TIMESTAMP = 2*3600
 
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
 app = Flask(__name__)
