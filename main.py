@@ -200,7 +200,8 @@ def handle_text(message, txt):
             cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
             if cur.day == dr_day and cur.month == dr_month:
                 bot.send_message(message.chat.id, 'Именинника спросить забыли',reply_to_message_id=message.message_id)
-        elif message.reply_to_message is not None and message.reply_to_message.from_user.id == 6964908043:
+                return
+        if message.reply_to_message is not None and message.reply_to_message.from_user.id == 6964908043:
             bot.send_message(message.chat.id, 'Хохла спросить забыли',reply_to_message_id=message.message_id)
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
