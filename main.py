@@ -120,6 +120,14 @@ def get_pil(fid):
     im = Image.open(BytesIO(downloaded_file))
     return im
 
+@bot.message_handler(commands=["start"])
+def msg_start(message):
+    return
+
+@bot.message_handler(commands=["test"])
+def msg_test(message):
+    return
+
 @bot.message_handler(commands=["pet"])
 def msg_pet(message):
         if message.reply_to_message is None:
@@ -193,7 +201,8 @@ def msg_sex(message):
 
 def handle_text(message, txt):
         print('Сообщение получено')
-        text_for_reaction = re.sub('[^а-я]', ' ', txt.lower()).split()
+        low = txt.lower()
+        text_for_reaction = re.sub('[^а-я]', ' ', low).split()
         if message.from_user.id in nekosas:
             args = nekosas[message.from_user.id]
             dr_day = args[0]
@@ -206,7 +215,7 @@ def handle_text(message, txt):
             bot.send_message(message.chat.id, 'Хохла спросить забыли',reply_to_message_id=message.message_id)
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
-        elif '@all' in txt.lower().split():
+        elif '@all' in low:
             slavoneki = [5417937009,460507186,783003689,540255407,523497602,503671007,448214297,729883976,738931917]
             if message.from_user.id in slavoneki:
                 slavoneki.remove(message.from_user.id)
@@ -221,9 +230,9 @@ def handle_text(message, txt):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU1krYllZmDsM70Wflt5oZ3-_DwKdAACqBoAAqgrQUv0qGwOc3lWNi8E',reply_to_message_id=message.message_id)
         elif 'кринж' in text_for_reaction:
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU9krYl2-rfaY7UQB_35FDwm1FBL9wACvxoAAuorQEtk0hzsZpp1hi8E',reply_to_message_id=message.message_id)
-        elif 'давид' in text_for_reaction:
+        elif 'давид' in low:
             bot.send_message(message.chat.id, 'Давид шедевр',reply_to_message_id=message.message_id)
-        elif 'негр' in text_for_reaction or 'негры' in text_for_reaction or 'негра' in text_for_reaction or 'негров' in text_for_reaction:
+        elif 'негр' in low or 'нигер' in low:
             set_reaction(message.chat.id, message.id, "💅")
         elif 'сбу' in text_for_reaction:
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEKWrBlDPH3Ok1hxuoEndURzstMhckAAWYAAm8sAAIZOLlLPx0MDd1u460wBA',reply_to_message_id=message.message_id)
@@ -231,6 +240,8 @@ def handle_text(message, txt):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEK-splffs7OZYtr8wzINEw4lxbvwywoAACXSoAAg2JiEoB98dw3NQ3FjME',reply_to_message_id=message.message_id)
         elif 'зелебоба' in text_for_reaction or 'зелень' in text_for_reaction or 'зеленский' in text_for_reaction or 'зеленський' in text_for_reaction:
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELGOplmDc9SkF-ZnVsdNl4vhvzZEo7BQAC5SwAAkrDgEr_AVwN_RkClDQE',reply_to_message_id=message.message_id)
+        elif 'некоарк' in low or 'неко арк' in low or 'neco arc' in low or 'necoarc' in low:
+            bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELHUtlm1wm-0Fc-Ny2na6ogFAuHLC-DgAChisAAgyUiEose7WRTmRWsjQE',reply_to_message_id=message.message_id)
 
 @bot.message_handler(func=lambda message: True, content_types=['photo','video','document','text','animation','sticker'])
 def msg_text(message):
@@ -283,12 +294,13 @@ def jobnight():
 
 def jobweek():
     stickers = [
-    'CAACAgIAAxkBAAEKhs9lKvK6BsB0RFUXM-M34Fea_XAHbQACyRYAAqjSgUvZ7sYejHfOlzAE',
-    'CAACAgIAAxkBAAEKhtFlKvLT1KWSDtTpZGt_7tKccjD4IAACNxQAAksbgEvt_JM25B-dozAE',
-    'CAACAgIAAxkBAAEKhtNlKvLvXwXM4VKp_tb3KeMt3_HoJgACohcAArw1gUu9AtlM7MrK8DAE',
-    'CAACAgIAAxkBAAEKhtVlKvL9dKgzm2PWVPxrs-FEugGLKAACbBUAAu4tiEs5QNHnNZ-5BzAE',
-    'CAACAgIAAxkBAAEKhtdlKvMVxSXjWvaPwXKjE2k41PcdzgACWxcAAomDiUu7YG_wPShz4zAE',
-    'CAACAgIAAxkBAAEKhtllKvMmoaXL8znEcIL6plm2V9RmrAACoBYAAgwTgUsYv06y1Bvz1DAE'
+    'CAACAgIAAxkBAAELHRhlmy5lZ3DjqeJcBx1gzqVwPb3gAgACyRYAAqjSgUvZ7sYejHfOlzQE',
+    'CAACAgIAAxkBAAELHRplmy5qczsacTL8PVB___-SYoW2KwACNxQAAksbgEvt_JM25B-dozQE',
+    'CAACAgIAAxkBAAELHRxlmy5tChW5VDyUyEXWUqfHSTSgjQACohcAArw1gUu9AtlM7MrK8DQE',
+    'CAACAgIAAxkBAAELHR5lmy5wBE877qJvNoUZv2qyIK4jOQACbBUAAu4tiEs5QNHnNZ-5BzQE',
+    'CAACAgIAAxkBAAELHSBlmy5zlVJNQ1kpJjzLqRJpzvq9XgACWxcAAomDiUu7YG_wPShz4zQE',
+    'CAACAgIAAxkBAAELHSJlmy53dhqy1F0QGZbSQV0yWhdL8gACoBYAAgwTgUsYv06y1Bvz1DQE',
+    'CAACAgIAAxkBAAELHSRlmy57tJC9YoKiyAKvL9y-oAEdiQACgxUAAuqKgUvgoYyaWs-hnTQE'
     ]
     cur = datetime.now()
     if cur.month == 10 and cur.day == 19:
@@ -297,9 +309,9 @@ def jobweek():
         bot.send_sticker(NEKOSLAVIA_CHATID, stickers[datetime.weekday(cur)])
 
 if __name__ == '__main__':
-    schedule.every().day.at("22:01").do(jobweek)
-    schedule.every().day.at("06:01").do(jobday)
-    schedule.every().day.at("23:01").do(jobnight)
+    schedule.every().day.at("22:00").do(jobweek)
+    schedule.every().day.at("06:00").do(jobday)
+    schedule.every().day.at("23:00").do(jobnight)
     t = Thread(target=updater)
     t.start()
     bot.send_message(ME_CHATID, 'Запущено')
