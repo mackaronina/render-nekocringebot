@@ -127,7 +127,7 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    jod_day()
+    jobday()
 
 @bot.message_handler(commands=["pet"])
 def msg_pet(message):
