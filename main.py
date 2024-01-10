@@ -42,6 +42,7 @@ SERVICE_CHATID = -1001694727085
 NEKOSLAVIA_CHATID = -1001268892138
 ME_CHATID = 738931917
 TIMESTAMP = 2*3600
+USER_BOT = 6557597614
 
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
 app = Flask(__name__)
@@ -126,7 +127,7 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    return
+    jod_day()
 
 @bot.message_handler(commands=["pet"])
 def msg_pet(message):
@@ -243,14 +244,23 @@ def handle_text(message, txt):
         elif 'некоарк' in low or 'неко арк' in low or 'neco arc' in low or 'necoarc' in low:
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELHUtlm1wm-0Fc-Ny2na6ogFAuHLC-DgAChisAAgyUiEose7WRTmRWsjQE',reply_to_message_id=message.message_id)
 
-@bot.message_handler(func=lambda message: True, content_types=['photo','video','document','text','animation','sticker'])
+@bot.message_handler(func=lambda message: True, content_types=['photo','video','text'])
 def msg_text(message):
+    if message.from_user.id == USER_BOT:
+        return
     if message.text is not None:
         handle_text(message, message.text)
     elif message.caption is not None:
         handle_text(message, message.caption)
     else:
         handle_text(message, 'а')
+
+@bot.message_handler(func=lambda message: True, content_types=['voice'])
+def msg_voice(message):
+    if message.from_user.id != USER_BOT:
+        return
+    bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
+    bot.send_voice(NEKOSLAVIA_CHATID, message.voice.file_id)
 
 @app.route('/' + token, methods=['POST'])
 def get_message():
@@ -284,10 +294,8 @@ def updater():
         time.sleep(1)
         
 def jobday():
-    bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
-    k = random.randint(1,10)
-    with open(f'voice_day/{k}.ogg', 'rb') as aud:
-        bot.send_audio(chat_id=NEKOSLAVIA_CHATID, audio=aud)
+    with requests.Session() as s:
+        s.get("https://uptimebot-7oo5.onrender.com/morning")
 
 def jobnight():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEKXtllDtEnW5DZM-V3VQpFEnzKY0CTOgACsD0AAhGtWEjUrpGNhMRheDAE')
