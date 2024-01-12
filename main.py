@@ -202,7 +202,6 @@ def msg_sex(message):
 
 def handle_text(message, txt):
         print('Сообщение получено')
-        bot.send_message(ME_CHATID, str(message.id))
         low = txt.lower()
         text_for_reaction = re.sub('[^а-я]', ' ', low).split()
         if message.from_user.id in nekosas:
