@@ -25,7 +25,7 @@ class ExHandler(telebot.ExceptionHandler):
         bot.send_message(ME_CHATID, traceback.format_exc())
         return True
 bot = telebot.TeleBot(token, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
-
+used_files = []
 nekosas = {
 540255407: (16, 4),
 738931917: (17, 2),
@@ -128,6 +128,10 @@ def msg_start(message):
 @bot.message_handler(commands=["test"])
 def msg_test(message):
     jobday()
+
+@bot.message_handler(commands=["del"])
+def msg_del(message):
+    bot.delete_message(chat_id=message.chat.id, message_id=message.reply_to_message.id)
 
 @bot.message_handler(commands=["pet"])
 def msg_pet(message):
@@ -244,23 +248,20 @@ def handle_text(message, txt):
         elif 'некоарк' in low or 'неко арк' in low or 'neco arc' in low or 'necoarc' in low:
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELHUtlm1wm-0Fc-Ny2na6ogFAuHLC-DgAChisAAgyUiEose7WRTmRWsjQE',reply_to_message_id=message.message_id)
 
-@bot.message_handler(func=lambda message: True, content_types=['photo','video','text'])
+@bot.message_handler(func=lambda message: True, content_types=['photo','video','text','voice'])
 def msg_text(message):
-    if message.from_user.id == USER_BOT:
-        return
-    if message.text is not None:
+    if message.chat.id == USER_BOT:
+        if message.voice is not None:
+            bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
+            bot.send_voice(NEKOSLAVIA_CHATID, message.voice.file_id)
+        elif message.video is not None and message.video.file_id not in used_files:
+            used_files.append(message.video.file_id)
+            bot.send_video(NEKOSLAVIA_CHATID, message.video.file_id)
+            bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAELKbBlogXcIFNenqBZ8i47PtCi9XI-GgACdisAAs-rgUqbE4x78jgMmDQE')
+    elif message.text is not None:
         handle_text(message, message.text)
     elif message.caption is not None:
         handle_text(message, message.caption)
-    else:
-        handle_text(message, 'а')
-
-@bot.message_handler(func=lambda message: True, content_types=['voice'])
-def msg_voice(message):
-    if message.from_user.id != USER_BOT:
-        return
-    bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
-    bot.send_voice(NEKOSLAVIA_CHATID, message.voice.file_id)
 
 @app.route('/' + token, methods=['POST'])
 def get_message():
