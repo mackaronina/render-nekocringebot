@@ -127,7 +127,7 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    jobday()
+    jobhour()
 
 @bot.message_handler(commands=["del"])
 def msg_del(message):
@@ -298,6 +298,10 @@ def jobday():
     with requests.Session() as s:
         s.get("https://uptimebot-7oo5.onrender.com/morning")
 
+def jobhour():
+    with requests.Session() as s:
+        s.get("https://uptimebot-7oo5.onrender.com/getposts")
+
 def jobnight():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEKXtllDtEnW5DZM-V3VQpFEnzKY0CTOgACsD0AAhGtWEjUrpGNhMRheDAE')
 
@@ -321,6 +325,7 @@ if __name__ == '__main__':
     schedule.every().day.at("22:00").do(jobweek)
     schedule.every().day.at("06:00").do(jobday)
     schedule.every().day.at("23:00").do(jobnight)
+    schedule.every(60).minutes.do(jobhour)
     t = Thread(target=updater)
     t.start()
     bot.send_message(ME_CHATID, 'Запущено')
