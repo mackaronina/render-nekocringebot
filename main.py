@@ -254,7 +254,7 @@ def msg_text(message):
         if message.voice is not None:
             bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
             bot.send_voice(NEKOSLAVIA_CHATID, message.voice.file_id)
-        elif message.video is not None and message.video.file_unique_id not in used_files:
+        elif message.video is not None and message.video.file_unique_id not in used_files and message.caption is not None and '#NecoArc' in message.caption:
             used_files.append(message.video.file_unique_id)
             bot.send_video(NEKOSLAVIA_CHATID, message.video.file_id)
             bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAELKbBlogXcIFNenqBZ8i47PtCi9XI-GgACdisAAs-rgUqbE4x78jgMmDQE')
