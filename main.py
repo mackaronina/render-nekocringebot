@@ -18,7 +18,7 @@ import math
 import traceback
 from datetime import datetime
 
-time.sleep(2)
+time.sleep(3)
 token = '6964908043:AAE0fSVJGwNKOQWAwQRH6QDfuuXZx2EQNME'
 class ExHandler(telebot.ExceptionHandler):
     def handle(self, exc):
@@ -47,7 +47,7 @@ USER_BOT = 6557597614
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
 app = Flask(__name__)
 bot.remove_webhook()
-bot.set_webhook(url=APP_URL, allowed_updates=['message',  'callback_query', 'chat_member'])
+bot.set_webhook(url=APP_URL)
 
 def dominant_color(image):
     width, height = 150,150
