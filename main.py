@@ -263,6 +263,10 @@ def msg_text(message):
     elif message.caption is not None:
         handle_text(message, message.caption)
 
+@bot.message_handler(func=lambda message: True, content_types=['new_chat_title'])
+def msg_title(message):
+    bot.send_message(message.chat.id, 'Верни бля',reply_to_message_id=message.message_id)
+
 @app.route('/' + token, methods=['POST'])
 def get_message():
     json_string = request.get_data().decode('utf-8')
