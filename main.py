@@ -220,7 +220,7 @@ def handle_text(message, txt):
             bot.send_message(message.chat.id, 'Хохла спросить забыли',reply_to_message_id=message.message_id)
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
-        elif search(r'\b@all\b',low):
+        elif '@all' in low:
             slavoneki = [5417937009,460507186,783003689,540255407,523497602,503671007,448214297,729883976,738931917]
             if message.from_user.id in slavoneki:
                 slavoneki.remove(message.from_user.id)
@@ -243,7 +243,7 @@ def handle_text(message, txt):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEKWrBlDPH3Ok1hxuoEndURzstMhckAAWYAAm8sAAIZOLlLPx0MDd1u460wBA',reply_to_message_id=message.message_id)
         elif search(r'\bпоро[хш]',low) or search(r'\bрошен',low) or search(r'\bгетьман',low):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEK-splffs7OZYtr8wzINEw4lxbvwywoAACXSoAAg2JiEoB98dw3NQ3FjME',reply_to_message_id=message.message_id)
-        elif search(r'\bзеленc',low):
+        elif search(r'\bзеленс',low):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELGOplmDc9SkF-ZnVsdNl4vhvzZEo7BQAC5SwAAkrDgEr_AVwN_RkClDQE',reply_to_message_id=message.message_id)
         elif search(r'\bнеко.?арк',low) or search(r'\bneco.?arc',low):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELHUtlm1wm-0Fc-Ny2na6ogFAuHLC-DgAChisAAgyUiEose7WRTmRWsjQE',reply_to_message_id=message.message_id)
