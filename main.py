@@ -4,6 +4,7 @@ from flask import Flask, request, send_from_directory, send_file, jsonify, rende
 from petpetgif.saveGif import save_transparent_gif
 from io import BytesIO, StringIO
 from PIL import Image,ImageDraw,ImageFont, ImageStat
+import textwrap
 from pkg_resources import resource_stream
 from threading import Thread
 import time
@@ -121,6 +122,25 @@ def get_pil(fid):
     im = Image.open(BytesIO(downloaded_file))
     return im
 
+def send_pil(im):
+    bio = BytesIO()
+    bio.name = 'result.png'
+    im.save(bio, 'PNG')
+    bio.seek(0)
+    return bio
+
+def draw_text_rectangle(draw,text,rect_w,rect_h,cord_x,cord_y):
+    text = text.upper()
+    selected_size = 1
+    for size in range(1, 150):
+        arial = ImageFont.FreeTypeFont('comicbd.ttf', size=size)
+        w, h = arial.getsize(text)  # older versions
+        if w > rect_w or h > rect_h:
+            break 
+        selected_size = size     
+    arial = ImageFont.FreeTypeFont('comicbd.ttf', size=selected_size)
+    draw.text((cord_x, cord_y), text, fill='black', anchor='mm', font=arial)
+
 @bot.message_handler(commands=["start"])
 def msg_start(message):
     return
@@ -147,7 +167,17 @@ def msg_pet(message):
         img = get_pil(fid)
         mean = dominant_color(img)
         f = make(img, mean)
-        bot.send_animation(message.chat.id,f,reply_to_message_id=message.reply_to_message.message_id) 
+        bot.send_animation(message.chat.id,f,reply_to_message_id=message.reply_to_message.message_id)
+
+@bot.message_handler(commands=["necoarc"])
+def msg_necoarc(message):
+        if message.reply_to_message is None or message.reply_to_message.text is None:
+            bot.send_message(message.chat.id, 'Ответом на сообщение еблан',reply_to_message_id=message.message_id)
+            return
+        with Image.open('necoarc.png') as img:
+            draw = ImageDraw.Draw(img)
+            draw_text_rectangle(draw, message.reply_to_message.text, 220, 106, 336, 75)
+            bot.send_sticker(message.chat.id, send_pil(img), reply_to_message_id=message.reply_to_message.message_id)
 
 @bot.message_handler(commands=["cube"])
 def msg_cube(message):
@@ -231,10 +261,10 @@ def handle_text(message, txt):
             txt += '\n<b>П Р И З В А Н Ы</b>'
             bot.send_message(message.chat.id, text = txt,reply_to_message_id=message.message_id)
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEKhutlKvTvRWMv4htVFHb9vgAB1e6EsyUAAts4AAKQulhJOASe1-BSES0wBA')
-        elif search(r'\bбаза\b',low):
-            bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU1krYllZmDsM70Wflt5oZ3-_DwKdAACqBoAAqgrQUv0qGwOc3lWNi8E',reply_to_message_id=message.message_id)
-        elif search(r'\bкринж',low):
-            bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU9krYl2-rfaY7UQB_35FDwm1FBL9wACvxoAAuorQEtk0hzsZpp1hi8E',reply_to_message_id=message.message_id)
+        elif low == 'база':
+            bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU1krYllZmDsM70Wflt5oZ3-_DwKdAACqBoAAqgrQUv0qGwOc3lWNi8E')
+        elif low == 'кринж':
+            bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU9krYl2-rfaY7UQB_35FDwm1FBL9wACvxoAAuorQEtk0hzsZpp1hi8E')
         elif search(r'\bдавид',low):
             bot.send_message(message.chat.id, 'Давид шедевр',reply_to_message_id=message.message_id)
         elif 'негр' in low or 'нигер' in low:
