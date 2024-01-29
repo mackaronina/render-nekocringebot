@@ -138,7 +138,6 @@ def draw_text_rectangle(draw,text,rect_w,rect_h,cord_x,cord_y):
         arial = ImageFont.FreeTypeFont('comicbd.ttf', size=size)
         #w, h = arial.getsize(text)
         w, h = draw.multiline_textsize(text=text,font=arial,spacing=0)
-        print(h) 
         if w > rect_w or h > rect_h:
             break 
         selected_size = size   
@@ -181,7 +180,7 @@ def msg_say(message):
         with Image.open('necoarc.png') as img:
             draw = ImageDraw.Draw(img)
             draw_text_rectangle(draw, message.reply_to_message.text, 220, 106, 336, 80)
-            bot.send_sticker(message.chat.id, send_pil(img), reply_to_message_id=message.reply_to_message.message_id)
+            bot.send_photo(message.chat.id, send_pil(img), reply_to_message_id=message.reply_to_message.message_id)
 
 @bot.message_handler(commands=["cube"])
 def msg_cube(message):
