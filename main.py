@@ -150,7 +150,7 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    jobhour()
+    jobday()
 
 @bot.message_handler(commands=["del"])
 def msg_del(message):
@@ -180,7 +180,7 @@ def msg_say(message):
         with Image.open('necoarc.png') as img:
             draw = ImageDraw.Draw(img)
             draw_text_rectangle(draw, message.reply_to_message.text, 220, 106, 336, 80)
-            bot.send_photo(message.chat.id, send_pil(img), reply_to_message_id=message.reply_to_message.message_id)
+            bot.send_photo(message.chat.id, send_pil(img))
 
 @bot.message_handler(commands=["cube"])
 def msg_cube(message):
