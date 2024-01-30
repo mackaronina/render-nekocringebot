@@ -174,13 +174,19 @@ def msg_pet(message):
 
 @bot.message_handler(commands=["say"])
 def msg_say(message):
-        if message.reply_to_message is None or message.reply_to_message.text is None:
-            bot.send_message(message.chat.id, 'Ответом на сообщение еблан',reply_to_message_id=message.message_id)
+        if message.reply_to_message is None or (message.reply_to_message.text is None and message.reply_to_message.caption is None):
+            bot.send_message(message.chat.id, 'Ответом на текст еблан',reply_to_message_id=message.message_id)
             return
         with Image.open('necoarc.png') as img:
             draw = ImageDraw.Draw(img)
-            draw_text_rectangle(draw, message.reply_to_message.text, 220, 106, 336, 80)
-            bot.send_photo(message.chat.id, send_pil(img))
+            if message.reply_to_message.text is not None:
+                text = message.reply_to_message.text
+            else:
+                text = message.reply_to_message.caption
+            draw_text_rectangle(draw, text, 220, 106, 336, 80)
+            bot.add_sticker_to_set(user_id=738931917,name='necoarc_by_NekocringeBot',emojis='🫵',png_sticker=send_pil(img))
+            sset = bot.get_sticker_set('necoarc_by_NekocringeBot')
+            bot.send_sticker(message.chat.id, sset.stickers[-1].file_id)
 
 @bot.message_handler(commands=["cube"])
 def msg_cube(message):
