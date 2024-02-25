@@ -367,7 +367,6 @@ def jobweek():
 if __name__ == '__main__':
     schedule.every().day.at("22:00").do(jobweek)
     schedule.every().day.at("06:00").do(jobday)
-    schedule.every().day.at("23:00").do(jobnight)
     schedule.every(60).minutes.do(jobhour)
     t = Thread(target=updater)
     t.start()
