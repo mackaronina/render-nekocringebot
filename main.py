@@ -50,6 +50,8 @@ app = Flask(__name__)
 bot.remove_webhook()
 bot.set_webhook(url=APP_URL)
 
+react_id = []
+
 def dominant_color(image):
     width, height = 150,150
     image = image.resize((width, height),resample = 0)
@@ -150,7 +152,8 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    jobday()
+    m = bot.send_photo(message.chat.id, photo='AgACAgIAAx0CZQN7rQABBOYNZfW0GxvjkTV_h54xbL-zdcLQ0mIAAhjWMRvBGbBLd5agzlI7r_IBAAMCAAN4AAM0BA')
+    react_id.append(m.id)
 
 @bot.message_handler(commands=["del"])
 def msg_del(message):
@@ -306,6 +309,14 @@ def msg_text(message):
 def msg_title(message):
     bot.send_message(message.chat.id, 'Верни бля',reply_to_message_id=message.message_id)
 
+@bot.message_reaction_handler():
+def msg_reaction(event):
+    if event.message_id in react_id:
+        bot.delete_message(chat_id=event.chat.id, message_id=event.message_id)
+        chel = html.escape(event.user.full_name, quote = True)
+        idk = event.user.id
+        bot.send_message(event.chat.id, f'Сегодня с <a href="tg://user?id={idk}">{chel}</a> произойдёт нечто...')
+
 @app.route('/' + token, methods=['POST'])
 def get_message():
     json_string = request.get_data().decode('utf-8')
@@ -342,8 +353,10 @@ def jobday():
         s.get("https://uptimebot-7oo5.onrender.com/morning")
 
 def jobhour():
-    with requests.Session() as s:
-        s.get("https://uptimebot-7oo5.onrender.com/getposts")
+    r = random.randint(1,150)
+    if r == 42:
+        m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBOYNZfW0GxvjkTV_h54xbL-zdcLQ0mIAAhjWMRvBGbBLd5agzlI7r_IBAAMCAAN4AAM0BA')
+        react_id.append(m.id)
 
 def jobnight():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEKXtllDtEnW5DZM-V3VQpFEnzKY0CTOgACsD0AAhGtWEjUrpGNhMRheDAE')
