@@ -48,7 +48,7 @@ USER_BOT = 6557597614
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
 app = Flask(__name__)
 bot.remove_webhook()
-bot.set_webhook(url=APP_URL)
+bot.set_webhook(url=APP_URL, allowed_updates=['message', 'callback_query', 'message_reaction', 'message_reaction_count'])
 
 react_id = []
 
