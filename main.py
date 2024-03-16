@@ -309,7 +309,7 @@ def msg_text(message):
 def msg_title(message):
     bot.send_message(message.chat.id, 'Верни бля',reply_to_message_id=message.message_id)
 
-@bot.message_reaction_handler():
+@bot.message_reaction_handler()
 def msg_reaction(event):
     if event.message_id in react_id:
         bot.delete_message(chat_id=event.chat.id, message_id=event.message_id)
