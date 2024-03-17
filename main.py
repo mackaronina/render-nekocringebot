@@ -349,8 +349,7 @@ def updater():
         time.sleep(1)
         
 def jobday():
-    with requests.Session() as s:
-        s.get("https://uptimebot-7oo5.onrender.com/morning")
+    bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
 
 def jobhour():
     r = random.randint(1,150)
