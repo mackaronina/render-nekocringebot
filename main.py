@@ -352,8 +352,9 @@ def jobday():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
 
 def jobhour():
-    r = random.randint(1,150)
-    if r == 42:
+    r = random.randint(1,120)
+    cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
+    if r == 42 and cur.hour > 8:
         m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBOYNZfW0GxvjkTV_h54xbL-zdcLQ0mIAAhjWMRvBGbBLd5agzlI7r_IBAAMCAAN4AAM0BA')
         react_id.append(m.id)
 
