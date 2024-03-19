@@ -315,7 +315,7 @@ def msg_reaction(event):
         bot.delete_message(chat_id=event.chat.id, message_id=event.message_id)
         chel = html.escape(event.user.full_name, quote = True)
         idk = event.user.id
-        bot.send_message(event.chat.id, f'Сегодня с <a href="tg://user?id={idk}">{chel}</a> произойдёт нечто...')
+        bot.send_message(event.chat.id, f'Сегодня с <a href="tg://user?id={idk}">{chel}</a> произойдёт нечто хорошее ✨💅')
 
 @app.route('/' + token, methods=['POST'])
 def get_message():
@@ -352,7 +352,7 @@ def jobday():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
 
 def jobhour():
-    r = random.randint(1,120)
+    r = random.randint(1,300)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
     if r == 42 and cur.hour > 8:
         m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBOYNZfW0GxvjkTV_h54xbL-zdcLQ0mIAAhjWMRvBGbBLd5agzlI7r_IBAAMCAAN4AAM0BA')
