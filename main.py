@@ -152,7 +152,7 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    m = bot.send_photo(message.chat.id, photo='AgACAgIAAx0CZQN7rQABBOYNZfW0GxvjkTV_h54xbL-zdcLQ0mIAAhjWMRvBGbBLd5agzlI7r_IBAAMCAAN4AAM0BA')
+    m = bot.send_photo(message.chat.id, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
     react_id.append(m.id)
 
 @bot.message_handler(commands=["del"])
@@ -357,7 +357,7 @@ def jobhour():
     r = random.randint(1,150)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
     if r == 42 and cur.hour > 8:
-        m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBOYNZfW0GxvjkTV_h54xbL-zdcLQ0mIAAhjWMRvBGbBLd5agzlI7r_IBAAMCAAN4AAM0BA')
+        m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
         react_id.append(m.id)
 
 def jobnight():
