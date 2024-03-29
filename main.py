@@ -292,7 +292,9 @@ def handle_text(message, txt):
 
 @bot.message_handler(func=lambda message: True, content_types=['photo','video','text','voice'])
 def msg_text(message):
-    if message.chat.id == USER_BOT:
+    if message.chat.id == -1001694727085 and message.photo is not None:
+        bot.send_message(message.chat.id,str(message.photo[-1].file_id) + ' ' + str(message.photo[-1].file_size) + ' ' + bot.get_file_url(message.photo[-1].file_id), reply_to_message_id=message.message_id)
+    elif message.chat.id == USER_BOT:
         if message.voice is not None:
             bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
             bot.send_voice(NEKOSLAVIA_CHATID, message.voice.file_id)
