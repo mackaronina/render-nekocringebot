@@ -27,6 +27,7 @@ class ExHandler(telebot.ExceptionHandler):
         return True
 bot = telebot.TeleBot(token, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
 used_files = []
+'''
 nekosas = {
 540255407: (16, 4),
 738931917: (17, 2),
@@ -38,11 +39,23 @@ nekosas = {
 783003689: (27, 1),
 5417937009: (11,3)
 }
+'''
+nekosas = [
+(16, 4),
+(17, 2),
+(4, 7),
+(19, 2),
+(29, 4),
+(3, 10),
+(19, 1),
+(27, 1),
+(11,3)
+]
 
 SERVICE_CHATID = -1001694727085
 NEKOSLAVIA_CHATID = -1001268892138
 ME_CHATID = 738931917
-TIMESTAMP = 2*3600
+TIMESTAMP = 3*3600
 USER_BOT = 6557597614
 
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
@@ -248,8 +261,8 @@ def msg_sex(message):
             bot.send_animation(message.chat.id,r'https://media.tenor.com/bQLaiLcbKrMAAAAC/no-sex-cat.gif', reply_to_message_id=message.message_id)
 
 def handle_text(message, txt):
-        print('Сообщение получено')
         low = txt.lower()
+        '''
         if message.from_user.id in nekosas:
             args = nekosas[message.from_user.id]
             dr_day = args[0]
@@ -258,6 +271,7 @@ def handle_text(message, txt):
             if cur.day == dr_day and cur.month == dr_month:
                 bot.send_message(message.chat.id, 'Именинника спросить забыли',reply_to_message_id=message.message_id)
                 return
+        '''
         if message.reply_to_message is not None and message.reply_to_message.from_user.id == 6964908043:
             bot.send_message(message.chat.id, 'Хохла спросить забыли',reply_to_message_id=message.message_id)
         elif message.chat.id == message.from_user.id:
@@ -354,7 +368,7 @@ def jobday():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
 
 def jobhour():
-    r = random.randint(1,150)
+    r = random.randint(1,100)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
     if r == 42 and cur.hour > 8:
         m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
@@ -373,15 +387,19 @@ def jobweek():
     'CAACAgIAAxkBAAELHSJlmy53dhqy1F0QGZbSQV0yWhdL8gACoBYAAgwTgUsYv06y1Bvz1DQE',
     'CAACAgIAAxkBAAELHSRlmy57tJC9YoKiyAKvL9y-oAEdiQACgxUAAuqKgUvgoYyaWs-hnTQE'
     ]
-    cur = datetime.now()
-    if cur.month == 10 and cur.day == 19:
+    cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
+    if cur.month == 10 and cur.day == 20:
         bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEKiXplLTbsgpfjAo5uSvlAephSFbLDzAACYz4AAnnqaUmMWJC_jc4g1zAE')
     else:
         bot.send_sticker(NEKOSLAVIA_CHATID, stickers[datetime.weekday(cur)])
+    for d, m in nekosas:
+        if cur.month == m and cur.day == d:
+            bot.send_message(NEKOSLAVIA_CHATID, 'У кого-то сегодня др ✨💅')
 
 if __name__ == '__main__':
-    schedule.every().day.at("22:00").do(jobweek)
-    schedule.every().day.at("06:00").do(jobday)
+    random.seed()
+    schedule.every().day.at("21:01").do(jobweek)
+    schedule.every().day.at("05:01").do(jobday)
     schedule.every(60).minutes.do(jobhour)
     t = Thread(target=updater)
     t.start()
