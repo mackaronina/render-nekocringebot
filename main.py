@@ -23,7 +23,7 @@ time.sleep(3)
 token = '6964908043:AAE0fSVJGwNKOQWAwQRH6QDfuuXZx2EQNME'
 class ExHandler(telebot.ExceptionHandler):
     def handle(self, exc):
-        bot.send_message(ME_CHATID, traceback.format_exc())
+        bot.send_message(ME_CHATID, str(exc))
         return True
 bot = telebot.TeleBot(token, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
 used_files = []
@@ -368,9 +368,9 @@ def jobday():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
 
 def jobhour():
-    r = random.randint(1,100)
+    r = random.randint(1,10)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
-    if r == 42 and cur.hour > 8:
+    if r == 7 and cur.hour > 8:
         m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
         react_id.append(m.id)
 
