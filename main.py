@@ -368,7 +368,7 @@ def jobday():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
 
 def jobhour():
-    r = random.randint(1,60)
+    r = random.randint(1,100)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
     print(f'{r}  {cur.hour}')
     if r == 7 and cur.hour > 8:
