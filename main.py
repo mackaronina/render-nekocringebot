@@ -370,6 +370,7 @@ def jobday():
 def jobhour():
     r = random.randint(1,10)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
+    print(f'{r}  {cur.hour}')
     if r == 7 and cur.hour > 8:
         m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
         react_id.append(m.id)
