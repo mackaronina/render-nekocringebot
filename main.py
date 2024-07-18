@@ -18,12 +18,24 @@ import html
 import math
 import traceback
 from datetime import datetime
+import g4f
+from telethon.sync import TelegramClient
+from telethon.sessions import StringSession
+import asyncio
 
 time.sleep(3)
+
+g4f.debug.logging = True
+g4f.debug.check_version = False
+
+api_id = 17453825
+api_hash = 'aa6df76596b13eb999078e2e9796ff95'
+ses = '1ApWapzMBuyCFQo-t4AmnOgFx64Ek9CrNhxMtmCs2f3uQeroLo_3dJ27mGc6ASiThsRk4XWZM_I1m0aHB_DKKM-eVJ_YvaxhSbrWerhXJtxB3pZwo_DnCG8G8zKCdVcNRwDUbfJNfM92853b6XevUkYwMwzR8wWLbR-HtTyQqMrygoRld4D4vtz5Yfe5PuukjeqAJq9CDQQkY9ohgnpazJo83vBnirt_WPIV9NJeC1lQBULBhevUWVMfr8kz0XuW0klWpZyE8135a7hafzVEpcf5Zlu53-t-0rIYe-R5uuiZEz2uJoRdFoXIsI7jyTeBwb_Yw98bBtgf_NtSaGv-RVE2x_En7DBk='
+
 token = '6964908043:AAE0fSVJGwNKOQWAwQRH6QDfuuXZx2EQNME'
 class ExHandler(telebot.ExceptionHandler):
     def handle(self, exc):
-        bot.send_message(ME_CHATID, str(exc))
+        bot.send_message(ME_CHATID, traceback.format_exc())
         return True
 bot = telebot.TeleBot(token, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
 used_files = []
@@ -165,8 +177,7 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    m = bot.send_photo(message.chat.id, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
-    react_id.append(m.id)
+    jobday()
 
 @bot.message_handler(commands=["del"])
 def msg_del(message):
@@ -304,18 +315,10 @@ def handle_text(message, txt):
         elif search(r'\bнеко.?арк',low) or search(r'\bneco.?arc',low):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELHUtlm1wm-0Fc-Ny2na6ogFAuHLC-DgAChisAAgyUiEose7WRTmRWsjQE',reply_to_message_id=message.message_id)
 
-@bot.message_handler(func=lambda message: True, content_types=['photo','video','text','voice'])
+@bot.message_handler(func=lambda message: True, content_types=['photo','text'])
 def msg_text(message):
     if message.chat.id == -1001694727085 and message.photo is not None:
         bot.send_message(message.chat.id,str(message.photo[-1].file_id) + ' ' + str(message.photo[-1].file_size) + ' ' + bot.get_file_url(message.photo[-1].file_id), reply_to_message_id=message.message_id)
-    elif message.chat.id == USER_BOT:
-        if message.voice is not None:
-            bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
-            bot.send_voice(NEKOSLAVIA_CHATID, message.voice.file_id)
-        elif message.video is not None and message.video.file_unique_id not in used_files:
-            used_files.append(message.video.file_unique_id)
-            bot.send_video(NEKOSLAVIA_CHATID, message.video.file_id)
-            bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAELKbBlogXcIFNenqBZ8i47PtCi9XI-GgACdisAAs-rgUqbE4x78jgMmDQE')
     elif message.text is not None:
         handle_text(message, message.text)
     elif message.caption is not None:
@@ -366,11 +369,32 @@ def updater():
         
 def jobday():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
+    response = g4f.ChatCompletion.create(
+        model="gpt-4o",
+        messages=[
+        {"role": "system", "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины'},
+        {"role": "user", "content": "Напиши короткое необычное пожелание доброго утра для граждан Некославии"}
+        ],
+    )
+    print(response)
+    if len(response) > 500:
+        response = response[:500]
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    with TelegramClient(StringSession(ses), api_id, api_hash, loop=loop) as client:
+        client.start()
+        m = client.send_message('@silero_voice_bot', response)
+        time.sleep(5)
+        m = client.get_messages('@silero_voice_bot', ids=m.id+1)
+        bio = BytesIO()
+        client.download_media(m, bio)
+        bio.seek(0)
+        bot.send_voice(NEKOSLAVIA_CHATID, bio)
 
 def jobhour():
     r = random.randint(1,100)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
-    if r == 7 and cur.hour > 8:
+    if r == 42 and cur.hour > 8:
         m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
         react_id.append(m.id)
 
