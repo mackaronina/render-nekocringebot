@@ -5,4 +5,6 @@ pet-pet-gif==1.0.2
 pyTelegramBotAPI==4.17.0
 schedule==1.2.1
 lxml==4.9.3
-g4f==0.1.9.8
+g4f==0.3.2.2
+Telethon==1.36.0
+pycryptodome==3.20.0
