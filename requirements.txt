@@ -8,3 +8,4 @@ lxml==4.9.3
 g4f==0.3.2.2
 Telethon==1.36.0
 pycryptodome==3.20.0
+curl-cffi==0.7.1
