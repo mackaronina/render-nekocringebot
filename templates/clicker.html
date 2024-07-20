@@ -74,7 +74,9 @@
 		<img id="trophy" src="{{ url_for('static',filename='trophy.png') }}" alt="loading...">
 	</div>
 	<div id="all">
-		<p id="counter">aboba</p>
+		<p id="counter">0</p>
+		<br>
+		<br>
 		<img id="nekopic" src="{{ url_for('static',filename='tapalka.png') }}" alt="loading...">
 	</div>
 	<audio id="sound" src="{{ url_for('static',filename='gurenya.mp3') }}"></audio>
@@ -84,9 +86,21 @@
 	function sleep(ms) {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
-	let score = 0;
+	let tg = window.Telegram.WebApp;
+	tg.expand();  
+	tg.MainButton.disable()
+	tg.MainButton.hide();
+	tg.disableVerticalSwipes();
+
+	const response = await fetch("/clicker/get_info", {
+  		method: "POST",
+  		body: JSON.stringify({user_id: tg.initDataUnsafe.user.id, user_name: tg.initDataUnsafe.user.first_name})
+	});
+	const json = await response.json();
+	let score = json.score;
 	let counter = document.getElementById("counter");
-	counter.innerText = score;
+	counter.innerText = json.score;
+	
 	let nekopic = document.getElementById("nekopic");
 	let sound = document.getElementById("sound");
 	async function plus_coin(e) {
@@ -104,13 +118,11 @@
 
 		score++;
 		counter.innerText = score;
+		await fetch("/clicker/plus_one", {
+  			method: "POST",
+  			body: JSON.stringify({user_id: tg.initDataUnsafe.user.id})
+		});
 	}
 	nekopic.addEventListener("click", plus_coin);
-	
-	let tg = window.Telegram.WebApp;
-	tg.expand();  
-	tg.MainButton.disable()
-	tg.MainButton.hide();
-	tg.disableVerticalSwipes();
 </script>
 </html>
