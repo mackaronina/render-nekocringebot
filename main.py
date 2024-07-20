@@ -376,6 +376,7 @@ def clicker_get_info():
         content = request.get_json()
         user_id = content['user_id']
         user_name = content['user_name']
+        user_name = html.escape(user_name, quote = True)
         data = cursor.execute(f'SELECT level FROM clicker_users WHERE id = {user_id}')
         data = data.fetchone()     
         if data is None:
@@ -385,12 +386,30 @@ def clicker_get_info():
             cursor.execute(f'UPDATE clicker_users SET name = %s WHERE id = {user_id}', user_name)
             return jsonify({"score": data[0]})
 
-@app.route('/clicker/plus_one', methods=['POST'])
+@app.route('/clicker/plus', methods=['POST'])
 def clicker_plus_one():
         content = request.get_json()
         user_id = content['user_id']
-        cursor.execute(f'UPDATE clicker_users SET level = level + 1 WHERE id = {user_id}')
+        score = content['score']
+        cursor.execute(f'UPDATE clicker_users SET level = {score} WHERE id = {user_id}')
         return '!', 200
+
+@app.route('/clicker/top')
+def clicker_top():
+        res = "<table>"
+        data = cursor.execute(f'SELECT name, level FROM clicker_users ORDER BY level DESC LIMIT 10')
+        data = data.fetchall()
+        i = 1
+        if data is not None:
+            for d in data:
+                name = d[0]
+                level = d[1]
+                if len(name) > 18:
+                    name = (name[:18] + '..')
+                res += f'<tr><td>{i}. {name}</td><td>{level}</td></tr>'
+                i += 1
+        res += "</table>"
+        return render_template("top.html", top=res)
 
 def updater():
     print('Поток запущен')
