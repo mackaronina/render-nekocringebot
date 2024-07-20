@@ -22,8 +22,13 @@ import g4f
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 import asyncio
+from sqlalchemy import create_engine
 
 time.sleep(3)
+
+username = os.environ['USERNAME']
+password = os.environ['PASSWORD']
+cursor = create_engine(f'postgresql://postgres.hdahfrunlvoethhwinnc:gT77Av9pQ8IjleU2@aws-0-eu-central-1.pooler.supabase.com:5432/postgres', pool_recycle=280)
 
 g4f.debug.logging = True
 g4f.debug.check_version = False
@@ -364,6 +369,27 @@ def get_paint():
 @app.route('/clicker')
 def get_clicker():
         return render_template("clicker.html")
+
+@app.route('/clicker/get_info', methods=['POST'])
+def clicker_get_info():
+        content = request.get_json()
+        user_id = content['user_id']
+        user_name = content['user_name']
+        data = cursor.execute(f'SELECT level FROM clicker_users WHERE id = {user_id}')
+        data = data.fetchone()     
+        if data is None:
+            cursor.execute(f"INSERT INTO clicker_users (id, name) VALUES ({user_id}, %s)", user_name)
+            return jsonify({"score": 0})
+        else:
+            cursor.execute(f'UPDATE clicker_users SET name = %s WHERE id = {user_id}', user_name)
+            return jsonify({"score": data[0]})
+
+@app.route('/clicker/plus_one', methods=['POST'])
+def clicker_plus_one():
+        content = request.get_json()
+        user_id = content['user_id']
+        cursor.execute(f'UPDATE clicker_users SET level = level + 1 WHERE id = {user_id}')
+        return '!', 200
 
 def updater():
     print('Поток запущен')
