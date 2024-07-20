@@ -23,6 +23,7 @@ from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 import asyncio
 from sqlalchemy import create_engine
+import os
 
 time.sleep(3)
 
