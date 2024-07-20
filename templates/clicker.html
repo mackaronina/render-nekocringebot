@@ -94,6 +94,9 @@
 
 	const response = fetch("/clicker/get_info", {
   		method: "POST",
+  		headers: {
+    		'Content-Type': 'application/json;charset=utf-8'
+  		},
   		body: JSON.stringify({user_id: tg.initDataUnsafe.user.id, user_name: tg.initDataUnsafe.user.first_name})
 	});
 	const json = response.json();
@@ -120,6 +123,9 @@
 		counter.innerText = score;
 		await fetch("/clicker/plus_one", {
   			method: "POST",
+  			headers: {
+    			'Content-Type': 'application/json;charset=utf-8'
+  			},
   			body: JSON.stringify({user_id: tg.initDataUnsafe.user.id})
 		});
 	}
