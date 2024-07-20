@@ -361,6 +361,10 @@ def send_paint():
 def get_paint():
         return render_template("paint.html")
 
+@app.route('/clicker')
+def get_clicker():
+        return render_template("clicker.html")
+
 def updater():
     print('Поток запущен')
     while True:
