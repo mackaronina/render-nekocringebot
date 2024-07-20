@@ -103,12 +103,12 @@
 	})
 	.then(function(response) {
 		score = response.json().score;
-		counter.innerText = response.json().score;
+		counter.innerText = score;
 	});
 
 	let nekopic = document.getElementById("nekopic");
 	let sound = document.getElementById("sound");
-	
+
 	async function plus_coin(e) {
 		sound.pause();
 		sound.currentTime = 0;
