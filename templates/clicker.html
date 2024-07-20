@@ -83,9 +83,6 @@
 </body>
 
 <script>
-	function sleep(ms) {
-		return new Promise(resolve => setTimeout(resolve, ms));
-	}
 	let tg = window.Telegram.WebApp;
 	tg.expand();  
 	tg.MainButton.disable()
@@ -126,14 +123,23 @@
 
 		score++;
 		counter.innerText = score;
-		fetch("/clicker/plus_one", {
+	}
+	nekopic.addEventListener("click", plus_coin);
+
+	async function upd_score() {
+		await fetch("/clicker/plus", {
   			method: "POST",
   			headers: {
     			'Content-Type': 'application/json;charset=utf-8'
   			},
-  			body: JSON.stringify({user_id: tg.initDataUnsafe.user.id})
+  			body: JSON.stringify({user_id: tg.initDataUnsafe.user.id, score: score})
 		});
 	}
-	nekopic.addEventListener("click", plus_coin);
+	setInterval(upd_score, 2000);
+
+	async function redirectus(e) {
+		window.location = "/clicker/top";
+	}
+	trophy.addEventListener("click", redirectus);
 </script>
 </html>

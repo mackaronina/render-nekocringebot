@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Nekocoin</title>
+	<script src="https://telegram.org/js/telegram-web-app.js"></script> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/fullpage.js" integrity="sha512-eH2N2Zt2AeLuFlFvRSEeZcVeAESY+8nfIqhxx0XXEou6w/ G4lLY3K8UKNYqi6e1pLXDduVF1KF/lbyxy3+X6OA==" crossorigin="anonymous"></script>
+	<style>
+		@font-face {
+   			font-family: "Pixel Cyr";
+   			font-weight: normal;
+   			font-style: normal;
+   			src: url("{{ url_for('static',filename='PixelCyrNormal.ttf') }}");
+		}
+		body { 
+			font-family: "Pixel Cyr", normal;
+			user-select: none;
+			color: #ebebeb;
+    		background: linear-gradient(#8c733c, #221e14) fixed;
+   		}
+   		#all {
+   			display: flex;
+   			justify-content: center;
+   			align-items: center;
+    		flex-direction: column;
+    		font-size: 40px;
+   			text-align: center;
+   		}
+   		table, th, td {
+   			border-spacing: 30px 20px;
+   			border: 0px;
+   			font-size: 30px;
+   			text-align: start;
+   		}
+		#contr {
+			position: relative;
+		}
+		#trophy {
+			top: 10px;
+			right: 10px;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div id="contr">
+		<img id="trophy" src="{{ url_for('static',filename='close.png') }}" alt="loading...">
+	</div>
+	<div id="all">
+		<p>Топ тапальщиков некоарка:</p>
+		{{top|safe}}
+	</div>
+</body>
+
+<script>
+	let tg = window.Telegram.WebApp;
+	tg.expand();  
+	tg.MainButton.disable()
+	tg.MainButton.hide();
+	tg.disableVerticalSwipes();
+
+	async function redirectus(e) {
+		window.location = "/clicker";
+	}
+	trophy.addEventListener("click", redirectus);
+</script>
+</html>
