@@ -109,9 +109,8 @@
 	let sound = document.getElementById("sound");
 
 	async function plus_coin(e) {
-		sound.pause();
-		sound.currentTime = 0;
-		sound.play();
+		soundobj = new Audio(sound.src);
+		soundobj.play();
 
  		let point = document.createElement("p");
   		point.className = "plus1";
@@ -120,6 +119,7 @@
  		point.style.top = e.pageY - 60 + 'px';
  		point.style.position = "absolute";
   		document.body.appendChild(point);
+  		setTimeout(function(){point.remove();}, 3000);
 
 		score++;
 		counter.innerText = score;
