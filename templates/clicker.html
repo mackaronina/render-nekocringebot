@@ -92,20 +92,23 @@
 	tg.MainButton.hide();
 	tg.disableVerticalSwipes();
 
-	let response = fetch("/clicker/get_info", {
+	let score = 0;
+	let counter = document.getElementById("counter");
+	fetch("/clicker/get_info", {
   		method: "POST",
   		headers: {
     		'Content-Type': 'application/json;charset=utf-8'
   		},
   		body: JSON.stringify({user_id: tg.initDataUnsafe.user.id, user_name: tg.initDataUnsafe.user.first_name})
+	})
+	.then(function(response) {
+		score = response.json().score;
+		counter.innerText = response.json().score;
 	});
-	let json = JSON.parse(response.text());
-	let score = json.score;
-	let counter = document.getElementById("counter");
-	counter.innerText = json.score;
 
 	let nekopic = document.getElementById("nekopic");
 	let sound = document.getElementById("sound");
+	
 	async function plus_coin(e) {
 		sound.pause();
 		sound.currentTime = 0;
@@ -121,7 +124,7 @@
 
 		score++;
 		counter.innerText = score;
-		await fetch("/clicker/plus_one", {
+		fetch("/clicker/plus_one", {
   			method: "POST",
   			headers: {
     			'Content-Type': 'application/json;charset=utf-8'
