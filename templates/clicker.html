@@ -94,17 +94,19 @@
 
 	let score = 0;
 	let counter = document.getElementById("counter");
-	fetch("/clicker/get_info", {
-  		method: "POST",
-  		headers: {
-    		'Content-Type': 'application/json;charset=utf-8'
-  		},
-  		body: JSON.stringify({user_id: tg.initDataUnsafe.user.id, user_name: tg.initDataUnsafe.user.first_name})
-	})
-	.then(function(response) {
-		score = response.json().score;
+	async function do_something() {
+		const result = await fetch("/clicker/get_info", {
+	  		method: "POST",
+	  		headers: {
+	    		'Content-Type': 'application/json;charset=utf-8'
+	  		},
+	  		body: JSON.stringify({user_id: tg.initDataUnsafe.user.id, user_name: tg.initDataUnsafe.user.first_name})
+		});
+		const json = await result.json();
+		score = json.score;
 		counter.innerText = score;
-	});
+	}
+	do_something();
 
 	let nekopic = document.getElementById("nekopic");
 	let sound = document.getElementById("sound");
