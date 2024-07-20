@@ -397,7 +397,7 @@ def clicker_plus_one():
 @app.route('/clicker/top')
 def clicker_top():
         res = "<table>"
-        data = cursor.execute(f'SELECT name, level FROM clicker_users ORDER BY level DESC LIMIT 10')
+        data = cursor.execute(f'SELECT name, level FROM clicker_users ORDER BY level DESC LIMIT 7')
         data = data.fetchall()
         i = 1
         if data is not None:
