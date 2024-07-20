@@ -92,15 +92,15 @@
 	tg.MainButton.hide();
 	tg.disableVerticalSwipes();
 
-	const response = await fetch("/clicker/get_info", {
+	const response = fetch("/clicker/get_info", {
   		method: "POST",
   		body: JSON.stringify({user_id: tg.initDataUnsafe.user.id, user_name: tg.initDataUnsafe.user.first_name})
 	});
-	const json = await response.json();
+	const json = response.json();
 	let score = json.score;
 	let counter = document.getElementById("counter");
 	counter.innerText = json.score;
-	
+
 	let nekopic = document.getElementById("nekopic");
 	let sound = document.getElementById("sound");
 	async function plus_coin(e) {
