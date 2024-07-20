@@ -404,8 +404,8 @@ def clicker_top():
             for d in data:
                 name = d[0]
                 level = d[1]
-                if len(name) > 18:
-                    name = (name[:18] + '..')
+                if len(name) > 20:
+                    name = (name[:20] + '..')
                 res += f'<tr><td>{i}. {name}</td><td>{level}</td></tr>'
                 i += 1
         res += "</table>"
