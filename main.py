@@ -3,7 +3,7 @@ from telebot import types
 from flask import Flask, request, send_from_directory, send_file, jsonify, render_template, url_for
 from petpetgif.saveGif import save_transparent_gif
 from io import BytesIO, StringIO
-from PIL import Image,ImageDraw,ImageFont, ImageStat
+from PIL import Image, ImageDraw, ImageFont, ImageStat, ImageFilter
 import textwrap
 from pkg_resources import resource_stream
 from threading import Thread
@@ -18,12 +18,12 @@ import html
 import math
 import traceback
 from datetime import datetime
-import g4f
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 import asyncio
 from sqlalchemy import create_engine
 import os
+from groq import Groq
 
 time.sleep(3)
 
@@ -31,20 +31,27 @@ username = os.environ['USERNAME']
 password = os.environ['PASSWORD']
 cursor = create_engine(f'postgresql://postgres.hdahfrunlvoethhwinnc:gT77Av9pQ8IjleU2@aws-0-eu-central-1.pooler.supabase.com:5432/postgres', pool_recycle=280)
 
-g4f.debug.logging = True
-g4f.debug.check_version = False
+neuro = Groq(api_key=os.environ['GROQ'])
 
 api_id = 17453825
 api_hash = 'aa6df76596b13eb999078e2e9796ff95'
 ses = '1ApWapzMBuyCFQo-t4AmnOgFx64Ek9CrNhxMtmCs2f3uQeroLo_3dJ27mGc6ASiThsRk4XWZM_I1m0aHB_DKKM-eVJ_YvaxhSbrWerhXJtxB3pZwo_DnCG8G8zKCdVcNRwDUbfJNfM92853b6XevUkYwMwzR8wWLbR-HtTyQqMrygoRld4D4vtz5Yfe5PuukjeqAJq9CDQQkY9ohgnpazJo83vBnirt_WPIV9NJeC1lQBULBhevUWVMfr8kz0XuW0klWpZyE8135a7hafzVEpcf5Zlu53-t-0rIYe-R5uuiZEz2uJoRdFoXIsI7jyTeBwb_Yw98bBtgf_NtSaGv-RVE2x_En7DBk='
 
 token = '6964908043:AAE0fSVJGwNKOQWAwQRH6QDfuuXZx2EQNME'
+
 class ExHandler(telebot.ExceptionHandler):
     def handle(self, exc):
-        bot.send_message(ME_CHATID, traceback.format_exc())
+        sio = StringIO(traceback.format_exc())
+        sio.name = 'log.txt'
+        sio.seek(0)
+        bot.send_document(ME_CHATID, sio)
         return True
+
 bot = telebot.TeleBot(token, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
-used_files = []
+
+blocked_messages = []
+blocked_users = []
+
 '''
 nekosas = {
 540255407: (16, 4),
@@ -67,7 +74,8 @@ nekosas = [
 (3, 10),
 (19, 1),
 (27, 1),
-(11,3)
+(11,3),
+(26,12)
 ]
 
 SERVICE_CHATID = -1001694727085
@@ -177,6 +185,16 @@ def draw_text_rectangle(draw,text,rect_w,rect_h,cord_x,cord_y):
     arial = ImageFont.FreeTypeFont('comicbd.ttf', size=selected_size)
     draw.multiline_text((cord_x, cord_y), text, fill='black', anchor='mm', font=arial, align='center', spacing=0)
 
+def answer_callback_query(call,txt,show = False):
+    try:
+        bot.answer_callback_query(call.id,text = txt,show_alert = show)
+    except:
+        if show:
+            try:
+                bot.send_message(call.from_user.id, text = txt)
+            except:
+                pass
+
 @bot.message_handler(commands=["start"])
 def msg_start(message):
     return
@@ -277,6 +295,20 @@ def msg_sex(message):
         else:
             bot.send_animation(message.chat.id,r'https://media.tenor.com/bQLaiLcbKrMAAAAC/no-sex-cat.gif', reply_to_message_id=message.message_id)
 
+def handle_photo(message):
+    if message.chat.id == -1001694727085:
+        bot.send_message(message.chat.id,str(message.photo[-1].file_id) + ' ' + str(message.photo[-1].file_size) + ' ' + bot.get_file_url(message.photo[-1].file_id), reply_to_message_id=message.message_id)
+    elif message.chat.id == message.from_user.id:
+        img = get_pil(message.photo[-1].file_id)
+        img = img.filter(ImageFilter.GaussianBlur(20))
+        data = cursor.execute(f"INSERT INTO clicker_media (media) VALUES ('{message.photo[-1].file_id}') RETURNING id")
+        data = data.fetchone()
+        idk = data[0]  
+        keyboard = types.InlineKeyboardMarkup(row_width=1)
+        callback_button1 = types.InlineKeyboardButton(text = 'Открыть за 500 некокоинов',callback_data = f'pay {idk}')
+        keyboard.add(callback_button1)
+        bot.send_photo(NEKOSLAVIA_CHATID, send_pil(img), reply_markup=keyboard)
+
 def handle_text(message, txt):
         low = txt.lower()
         '''
@@ -294,7 +326,7 @@ def handle_text(message, txt):
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
         elif '@all' in low:
-            slavoneki = [5417937009,460507186,783003689,540255407,523497602,503671007,448214297,729883976,738931917]
+            slavoneki = [5417937009,460507186,783003689,540255407,523497602,503671007,448214297,729883976,738931917,689209397]
             if message.from_user.id in slavoneki:
                 slavoneki.remove(message.from_user.id)
             random.shuffle(slavoneki)
@@ -321,14 +353,56 @@ def handle_text(message, txt):
         elif search(r'\bнеко.?арк',low) or search(r'\bneco.?arc',low):
             bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELHUtlm1wm-0Fc-Ny2na6ogFAuHLC-DgAChisAAgyUiEose7WRTmRWsjQE',reply_to_message_id=message.message_id)
 
-@bot.message_handler(func=lambda message: True, content_types=['photo','text'])
+@bot.message_handler(func=lambda message: True, content_types=['photo','video','document','text','animation'])
 def msg_text(message):
-    if message.chat.id == -1001694727085 and message.photo is not None:
-        bot.send_message(message.chat.id,str(message.photo[-1].file_id) + ' ' + str(message.photo[-1].file_size) + ' ' + bot.get_file_url(message.photo[-1].file_id), reply_to_message_id=message.message_id)
-    elif message.text is not None:
+    if message.photo is not None:
+        handle_photo(message)
+    if message.text is not None:
         handle_text(message, message.text)
-    elif message.caption is not None:
+    if message.caption is not None:
         handle_text(message, message.caption)
+
+def callback_process(call):
+    args = call.data.split()
+    cmd = args[0]
+    if cmd == "pay":
+        idk = int(args[1])
+        data = cursor.execute(f'SELECT level FROM clicker_users WHERE id = {call.from_user.id}')
+        data = data.fetchone()     
+        if data is None:
+            answer_callback_query(call,'Ты бомж')
+            return
+        score = data[0]
+        if score < 500:
+            answer_callback_query(call,'Ты бомж')
+            return
+        data = cursor.execute(f'SELECT media FROM clicker_media WHERE id = {idk}')
+        data = data.fetchone()     
+        if data is None:
+            answer_callback_query(call,'Чет хуйня какая-то')
+            return
+        media = data[0]
+        try:
+            bot.send_photo(call.from_user.id, media)
+            cursor.execute(f'UPDATE clicker_users SET level = level - 500 WHERE id = {call.from_user.id}')
+            answer_callback_query(call,'Отправил фулл в лс', True)
+        except:
+            answer_callback_query(call,'Тебе надо первым написать боту в лс', True)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_get(call):
+    strkey = f'{call.message.chat.id} {call.message.message_id}'
+    if strkey in blocked_messages or call.from_user.id in blocked_users:
+        answer_callback_query(call,'Подожди заебал')
+        return
+    blocked_messages.append(strkey)
+    blocked_users.append(call.from_user.id)
+    try:
+        callback_process(call)
+    finally:
+        blocked_messages.remove(strkey)
+        blocked_users.remove(call.from_user.id)
 
 @bot.message_handler(func=lambda message: True, content_types=['new_chat_title'])
 def msg_title(message):
@@ -419,13 +493,14 @@ def updater():
         
 def jobday():
     bot.send_sticker(SERVICE_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
-    response = g4f.ChatCompletion.create(
-        model="gpt-4o",
+    chat_completion = neuro.chat.completions.create(
         messages=[
-        {"role": "system", "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины'},
-        {"role": "user", "content": "Напиши короткое необычное пожелание доброго утра для граждан Некославии"}
+            {"role": "system", "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины'},
+            {"role": "user", "content": "Напиши короткое необычное пожелание доброго утра для граждан Некославии"}
         ],
+        model="llama3-70b-8192"
     )
+    response = chat_completion.choices[0].message.content
     print(response)
     if len(response) > 500:
         response = response[:500]
