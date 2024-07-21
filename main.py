@@ -492,7 +492,7 @@ def updater():
         time.sleep(1)
         
 def jobday():
-    bot.send_sticker(SERVICE_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
+    bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
     chat_completion = neuro.chat.completions.create(
         messages=[
             {"role": "system", "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины'},
@@ -514,7 +514,7 @@ def jobday():
         bio = BytesIO()
         client.download_media(m, bio)
         bio.seek(0)
-        bot.send_voice(SERVICE_CHATID, bio)
+        bot.send_voice(NEKOSLAVIA_CHATID, bio)
 
 def jobhour():
     r = random.randint(1,100)
