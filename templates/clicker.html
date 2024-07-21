@@ -116,13 +116,14 @@
 
 		if (score%100 == 0) {
 			let soundobj = new Audio(sound2.src);
+			soundobj.volume = 0.8;
 			soundobj.play();
 		} 
 		else {
 			let soundobj = new Audio(sound.src);
 			soundobj.play();
 		}
-		
+
  		let point = document.createElement("p");
   		point.className = "plus1";
   		point.innerText = "+1";
