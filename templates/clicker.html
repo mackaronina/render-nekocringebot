@@ -80,6 +80,7 @@
 		<img id="nekopic" src="{{ url_for('static',filename='tapalka.png') }}" alt="loading...">
 	</div>
 	<audio id="sound" src="{{ url_for('static',filename='gurenya.mp3') }}"></audio>
+	<audio id="sound2" src="{{ url_for('static',filename='nyaga.mp3') }}"></audio>
 </body>
 
 <script>
@@ -107,11 +108,21 @@
 
 	let nekopic = document.getElementById("nekopic");
 	let sound = document.getElementById("sound");
+	let sound2 = document.getElementById("sound2");
 
 	async function plus_coin(e) {
-		soundobj = new Audio(sound.src);
-		soundobj.play();
+		score++;
+		counter.innerText = score;
 
+		if (score%100 == 0) {
+			let soundobj = new Audio(sound2.src);
+			soundobj.play();
+		} 
+		else {
+			let soundobj = new Audio(sound.src);
+			soundobj.play();
+		}
+		
  		let point = document.createElement("p");
   		point.className = "plus1";
   		point.innerText = "+1";
@@ -120,9 +131,6 @@
  		point.style.position = "absolute";
   		document.body.appendChild(point);
   		setTimeout(function(){point.remove();}, 3000);
-
-		score++;
-		counter.innerText = score;
 	}
 	nekopic.addEventListener("click", plus_coin);
 
