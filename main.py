@@ -397,7 +397,7 @@ def clicker_plus_one():
 @app.route('/clicker/top')
 def clicker_top():
         res = "<table>"
-        data = cursor.execute(f'SELECT name, level FROM clicker_users ORDER BY level DESC LIMIT 7')
+        data = cursor.execute(f'SELECT name, level FROM clicker_users ORDER BY level DESC LIMIT 10')
         data = data.fetchall()
         i = 1
         if data is not None:
@@ -418,7 +418,7 @@ def updater():
         time.sleep(1)
         
 def jobday():
-    bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
+    bot.send_sticker(SERVICE_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
     response = g4f.ChatCompletion.create(
         model="gpt-4o",
         messages=[
@@ -439,7 +439,7 @@ def jobday():
         bio = BytesIO()
         client.download_media(m, bio)
         bio.seek(0)
-        bot.send_voice(NEKOSLAVIA_CHATID, bio)
+        bot.send_voice(SERVICE_CHATID, bio)
 
 def jobhour():
     r = random.randint(1,100)
@@ -464,6 +464,10 @@ def jobweek():
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
     if cur.month == 10 and cur.day == 20:
         bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEKiXplLTbsgpfjAo5uSvlAephSFbLDzAACYz4AAnnqaUmMWJC_jc4g1zAE')
+    elif cur.month == 9 and cur.day == 11:
+        bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEMhVRmnGqkCQ0Xd_Mxr7dV4Srmo7SOUgACTkgAAmEJ6UgJ1BtXpz2UCjUE')
+    elif cur.month == 3 and cur.day == 8:
+        bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEMhVZmnGrliZIzEqsMogQzsg00RX6GTQAC5lAAAhfW6EjSOEw38QNwYzUE')
     else:
         bot.send_sticker(NEKOSLAVIA_CHATID, stickers[datetime.weekday(cur)])
     for d, m in nekosas:
