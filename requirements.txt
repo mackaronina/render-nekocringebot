@@ -14,3 +14,4 @@ psycopg2==2.9.9
 PyMySQL==1.1.0
 nodriver==0.34
 groq==0.9.0
+tls-client==1.0.1
