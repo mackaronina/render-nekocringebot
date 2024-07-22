@@ -265,6 +265,15 @@ def msg_cube(message):
             "direction": (None,direct)
         }
         with requests.Session() as s:
+            p = s.get("https://en.bloggif.com/cube-3d")
+            print(p)
+            bot.send_message(ME_CHATID, p.status_code)
+            sio = StringIO(p.text)
+            sio.name = 'resp.txt'
+            sio.seek(0)
+            bot.send_document(ME_CHATID, sio)
+            soup = BeautifulSoup(p.text, 'lxml')
+            tkn = soup.find('form')
             linkfrm = "https://en.bloggif.com/cube-3d"
             p = s.post(linkfrm, files=dat)
             print(p)
