@@ -265,10 +265,7 @@ def msg_cube(message):
             "direction": (None,direct)
         }
         with requests.Session() as s:
-            p = s.get("https://en.bloggif.com/cube-3d")
-            soup = BeautifulSoup(p.text, 'lxml')
-            tkn = soup.find('form')
-            linkfrm = "https://en.bloggif.com" + tkn['action']
+            linkfrm = "https://en.bloggif.com/cube-3d"
             p = s.post(linkfrm, files=dat)
             print(p)
             soup = BeautifulSoup(p.text, 'lxml')
