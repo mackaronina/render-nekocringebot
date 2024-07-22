@@ -270,7 +270,7 @@ def msg_cube(message):
         soup = BeautifulSoup(p.text, 'lxml')
         tkn = soup.find('form')
         linkfrm = "https://en.bloggif.com/cube-3d"
-        p = s.post(linkfrm, files=dat)
+        p = s.post(linkfrm, data=dat)
         soup = BeautifulSoup(p.text, 'lxml')
         img = soup.find('a', class_='button gray-button')
         linkgif = "https://en.bloggif.com" + img['href']
