@@ -301,11 +301,11 @@ def handle_photo(message):
     elif message.chat.id == message.from_user.id:
         img = get_pil(message.photo[-1].file_id)
         img = img.filter(ImageFilter.GaussianBlur(20))
-        data = cursor.execute(f"INSERT INTO clicker_media (media) VALUES ('{message.photo[-1].file_id}') RETURNING id")
+        data = cursor.execute(f"INSERT INTO clicker_media (media, author) VALUES ('{message.photo[-1].file_id}', {message.from_user.id}) RETURNING id")
         data = data.fetchone()
         idk = data[0]  
         keyboard = types.InlineKeyboardMarkup(row_width=1)
-        callback_button1 = types.InlineKeyboardButton(text = 'Открыть за 500 некокоинов',callback_data = f'pay {idk}')
+        callback_button1 = types.InlineKeyboardButton(text = '💸 Открыть за 300 некокоинов 💸',callback_data = f'pay {idk}')
         keyboard.add(callback_button1)
         bot.send_photo(NEKOSLAVIA_CHATID, send_pil(img), reply_markup=keyboard)
 
@@ -373,18 +373,23 @@ def callback_process(call):
             answer_callback_query(call,'Ты бомж')
             return
         score = data[0]
-        if score < 500:
+        if score < 300:
             answer_callback_query(call,'Ты бомж')
             return
-        data = cursor.execute(f'SELECT media FROM clicker_media WHERE id = {idk}')
+        data = cursor.execute(f'SELECT media, author FROM clicker_media WHERE id = {idk}')
         data = data.fetchone()     
         if data is None:
             answer_callback_query(call,'Чет хуйня какая-то')
             return
         media = data[0]
+        author = data[1]
+        if call.from_user.id == author:
+            answer_callback_query(call,'Ты еблан?')
+            return
         try:
             bot.send_photo(call.from_user.id, media)
-            cursor.execute(f'UPDATE clicker_users SET level = level - 500 WHERE id = {call.from_user.id}')
+            cursor.execute(f'UPDATE clicker_users SET level = level - 300 WHERE id = {call.from_user.id}')
+            cursor.execute(f'UPDATE clicker_users SET level = level + 300 WHERE id = {author}')
             answer_callback_query(call,'Отправил фулл в лс', True)
         except:
             answer_callback_query(call,'Тебе надо первым написать боту в лс', True)
