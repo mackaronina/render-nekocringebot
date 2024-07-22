@@ -21,6 +21,10 @@
 			color: #ebebeb;
     		background: linear-gradient(#8c733c, #221e14) fixed;
    		}
+   		#rw{
+   			display: flex;
+			flex-direction: row;
+		}
    		#all {
    			display: flex;
    			justify-content: center;
@@ -74,7 +78,10 @@
 		<img id="trophy" src="{{ url_for('static',filename='trophy.png') }}" alt="loading...">
 	</div>
 	<div id="all">
-		<p id="counter">0</p>
+		<div id="rw">
+			<img src="{{ url_for('static',filename='coin.png') }}" alt="loading..." width="40" height="40">
+			<p id="counter">0</p>
+		</div>
 		<br>
 		<br>
 		<img id="nekopic" src="{{ url_for('static',filename='tapalka.png') }}" alt="loading...">
