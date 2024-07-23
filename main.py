@@ -10,7 +10,7 @@ from threading import Thread
 import time
 import schedule
 import requests
-import tls_client
+import curl_cffi
 from bs4 import BeautifulSoup
 import random
 from re import search
@@ -242,7 +242,6 @@ def msg_say(message):
 
 @bot.message_handler(commands=["cube"])
 def msg_cube(message):
-        print('принято')
         if message.reply_to_message is None:
             bot.send_message(message.chat.id, 'Ответом на сообщение еблан',reply_to_message_id=message.message_id)
             return
@@ -258,27 +257,33 @@ def msg_cube(message):
         bio.seek(0)
         direct = random.choice(['left','right'])
         dat = {
-            "target": (None,1),
-            "MAX_FILE_SIZE": (None,1073741824),
-            "image[]": ('result.png',bio.getvalue()),
-            "speed": (None,"ufast"),
-            "bg_color": (None,"000000"),
-            "direction": (None,direct)
+            "target": 1,
+            "MAX_FILE_SIZE": 1073741824,
+            "speed": "ufast",
+            "bg_color": "000000",
+            "direction": direct
         }
-        s = tls_client.Session(client_identifier="chrome112", random_tls_extension_order=True)
-        p = s.get("https://en.bloggif.com/cube-3d")
-        soup = BeautifulSoup(p.text, 'lxml')
-        tkn = soup.find('form')
-        linkfrm = "https://en.bloggif.com/cube-3d"
-        p = s.post(linkfrm, data=dat)
-        soup = BeautifulSoup(p.text, 'lxml')
-        img = soup.find('a', class_='button gray-button')
-        linkgif = "https://en.bloggif.com" + img['href']
-        p = s.get(linkgif)
-        bio = BytesIO(p.content)
-        bio.name = 'result.gif'
-        bio.seek(0)
-        bot.send_animation(message.chat.id,bio,reply_to_message_id=message.reply_to_message.message_id)
+        mp = curl_cffi.CurlMime()
+        mp.addpart(
+            name="image[]",
+            content_type="image/png",
+            filename="result.png",
+            data=bio.getvalue()
+        )
+        with curl_cffi.requests.Session() as s:
+            p = s.get("https://en.bloggif.com/cube-3d", impersonate="chrome110")
+            soup = BeautifulSoup(p.text, 'lxml')
+            tkn = soup.find('form')
+            linkfrm = "https://en.bloggif.com" + tkn['action']
+            p = s.post(linkfrm, data=dat, multipart=mp, impersonate="chrome110")
+            soup = BeautifulSoup(p.text, 'lxml')
+            img = soup.find('a', class_='button gray-button')
+            linkgif = "https://en.bloggif.com" + img['href']
+            p = s.get(linkgif, impersonate="chrome110")
+            bio = BytesIO(p.content)
+            bio.name = 'result.gif'
+            bio.seek(0)
+            bot.send_animation(message.chat.id,bio,reply_to_message_id=message.reply_to_message.message_id)
 
 @bot.message_handler(commands=["paint"])
 def msg_paint(message):
