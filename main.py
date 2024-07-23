@@ -9,8 +9,7 @@ from pkg_resources import resource_stream
 from threading import Thread
 import time
 import schedule
-import requests
-import curl_cffi
+from curl_cffi import requests, CurlMime
 from bs4 import BeautifulSoup
 import random
 from re import search
@@ -263,14 +262,14 @@ def msg_cube(message):
             "bg_color": "000000",
             "direction": direct
         }
-        mp = curl_cffi.CurlMime()
+        mp = CurlMime()
         mp.addpart(
             name="image[]",
             content_type="image/png",
             filename="result.png",
             data=bio.getvalue()
         )
-        with curl_cffi.requests.Session() as s:
+        with requests.Session() as s:
             p = s.get("https://en.bloggif.com/cube-3d", impersonate="chrome110")
             soup = BeautifulSoup(p.text, 'lxml')
             tkn = soup.find('form')
