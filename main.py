@@ -419,6 +419,7 @@ def msg_title(message):
 
 @bot.message_reaction_handler()
 def msg_reaction(event):
+    bot.send_message(SERVICE_CHATID, f'Пришло')
     if event.message_id in react_id:
         bot.delete_message(chat_id=event.chat.id, message_id=event.message_id)
         chel = html.escape(event.user.full_name, quote = True)
@@ -505,9 +506,9 @@ def jobday():
     chat_completion = neuro.chat.completions.create(
         messages=[
             {"role": "system", "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины'},
-            {"role": "user", "content": "Напиши короткое необычное пожелание доброго утра для граждан Некославии"}
+            {"role": "user", "content": "Напиши короткое необычное пожелание доброго утра для жителей Некославии"}
         ],
-        model="llama3-70b-8192"
+        model="llama-3.1-70b-versatile"
     )
     response = chat_completion.choices[0].message.content
     print(response)
