@@ -300,7 +300,7 @@ def msg_sex(message):
             bot.send_animation(message.chat.id,r'https://media.tenor.com/bQLaiLcbKrMAAAAC/no-sex-cat.gif', reply_to_message_id=message.message_id)
 
 def handle_photo(message):
-    if message.chat.id == -1001694727085:
+    if message.chat.id == SERVICE_CHATID:
         bot.send_message(message.chat.id,str(message.photo[-1].file_id) + ' ' + str(message.photo[-1].file_size) + ' ' + bot.get_file_url(message.photo[-1].file_id), reply_to_message_id=message.message_id)
     elif message.chat.id == message.from_user.id:
         img = get_pil(message.photo[-1].file_id)
