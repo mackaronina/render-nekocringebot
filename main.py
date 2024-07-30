@@ -325,7 +325,7 @@ def handle_text(message, txt):
                 bot.send_message(message.chat.id, 'Именинника спросить забыли',reply_to_message_id=message.message_id)
                 return
         '''
-        if message.reply_to_message is not None and message.reply_to_message.from_user.id == 6964908043:
+        if message.reply_to_message is not None and message.reply_to_message.from_user.id == bot.get_me().id:
             bot.send_message(message.chat.id, 'Хохла спросить забыли',reply_to_message_id=message.message_id)
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
@@ -530,7 +530,7 @@ def jobhour():
     r = random.randint(1,100)
     cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
     if r == 42 and cur.hour > 8:
-        m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAx0CZQN7rQABBT9sZgdSddI0o6HbVCoyAepLzAJbTV8AAvLXMRv8KkBIe66zumUTwqwBAAMCAAN4AAM0BA')
+        m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAxkBAAMbZqkcVrdd4uf2Aok1WIYOEqRKLPsAApLeMRs0KUhJMW2ULgABMKmXAQADAgADeAADNQQ')
         react_id.append(m.id)
 
 def jobnight():
