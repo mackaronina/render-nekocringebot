@@ -235,8 +235,8 @@ def msg_say(message):
             else:
                 text = message.reply_to_message.caption
             draw_text_rectangle(draw, text, 220, 106, 336, 80)
-            bot.add_sticker_to_set(user_id=7258570440,name='necoarc_by_NekocringeBot',emojis='🫵',png_sticker=send_pil(img))
-            sset = bot.get_sticker_set('necoarc_by_NekocringeBot')
+            bot.add_sticker_to_set(user_id=7258570440, name='sayneko_by_NekocringeBot', emojis='🫵',png_sticker=send_pil(img))
+            sset = bot.get_sticker_set('sayneko_by_NekocringeBot')
             bot.send_sticker(message.chat.id, sset.stickers[-1].file_id)
 
 @bot.message_handler(commands=["cube"])
