@@ -31,13 +31,14 @@ username = os.environ['USERNAME']
 password = os.environ['PASSWORD']
 cursor = create_engine(f'postgresql://postgres.hdahfrunlvoethhwinnc:gT77Av9pQ8IjleU2@aws-0-eu-central-1.pooler.supabase.com:5432/postgres', pool_recycle=280)
 
-neuro = Groq(api_key=os.environ['GROQ'])
+groq_key = os.environ['GROQ_KEY']
+neuro = Groq(api_key=groq_key)
 
-api_id = 17453825
-api_hash = 'aa6df76596b13eb999078e2e9796ff95'
-ses = '1ApWapzMBuyCFQo-t4AmnOgFx64Ek9CrNhxMtmCs2f3uQeroLo_3dJ27mGc6ASiThsRk4XWZM_I1m0aHB_DKKM-eVJ_YvaxhSbrWerhXJtxB3pZwo_DnCG8G8zKCdVcNRwDUbfJNfM92853b6XevUkYwMwzR8wWLbR-HtTyQqMrygoRld4D4vtz5Yfe5PuukjeqAJq9CDQQkY9ohgnpazJo83vBnirt_WPIV9NJeC1lQBULBhevUWVMfr8kz0XuW0klWpZyE8135a7hafzVEpcf5Zlu53-t-0rIYe-R5uuiZEz2uJoRdFoXIsI7jyTeBwb_Yw98bBtgf_NtSaGv-RVE2x_En7DBk='
+api_id = int(os.environ['API_ID'])
+api_hash = os.environ['API_HASH']
+ses = os.environ['SES']
 
-token = '6964908043:AAE0fSVJGwNKOQWAwQRH6QDfuuXZx2EQNME'
+token = os.environ['BOT_TOKEN']
 
 class ExHandler(telebot.ExceptionHandler):
     def handle(self, exc):
@@ -55,7 +56,7 @@ blocked_users = []
 '''
 nekosas = {
 540255407: (16, 4),
-738931917: (17, 2),
+7258570440: (17, 2),
 523497602: (4, 7),
 729883976: (19, 2),
 448214297: (29, 4),
@@ -78,11 +79,10 @@ nekosas = [
 (26,12)
 ]
 
-SERVICE_CHATID = -1001694727085
+SERVICE_CHATID = -4238835720
 NEKOSLAVIA_CHATID = -1001268892138
-ME_CHATID = 738931917
+ME_CHATID = 7258570440
 TIMESTAMP = 3*3600
-USER_BOT = 6557597614
 
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
 app = Flask(__name__)
@@ -235,7 +235,7 @@ def msg_say(message):
             else:
                 text = message.reply_to_message.caption
             draw_text_rectangle(draw, text, 220, 106, 336, 80)
-            bot.add_sticker_to_set(user_id=738931917,name='necoarc_by_NekocringeBot',emojis='🫵',png_sticker=send_pil(img))
+            bot.add_sticker_to_set(user_id=7258570440,name='necoarc_by_NekocringeBot',emojis='🫵',png_sticker=send_pil(img))
             sset = bot.get_sticker_set('necoarc_by_NekocringeBot')
             bot.send_sticker(message.chat.id, sset.stickers[-1].file_id)
 
@@ -330,7 +330,7 @@ def handle_text(message, txt):
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
         elif '@all' in low:
-            slavoneki = [5417937009,460507186,783003689,540255407,523497602,503671007,448214297,729883976,738931917,689209397]
+            slavoneki = [5417937009,460507186,783003689,540255407,523497602,503671007,448214297,729883976,7258570440,689209397]
             if message.from_user.id in slavoneki:
                 slavoneki.remove(message.from_user.id)
             random.shuffle(slavoneki)
