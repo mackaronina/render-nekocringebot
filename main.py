@@ -79,7 +79,7 @@ nekosas = [
 (26,12)
 ]
 
-SERVICE_CHATID = -4238835720
+SERVICE_CHATID = -1002171923232
 NEKOSLAVIA_CHATID = -1001268892138
 ME_CHATID = 7258570440
 TIMESTAMP = 3*3600
@@ -201,8 +201,9 @@ def msg_start(message):
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
-    jobday()
-
+    m = bot.send_photo(NEKOSLAVIA_CHATID, photo='AgACAgIAAxkBAAMbZqkcVrdd4uf2Aok1WIYOEqRKLPsAApLeMRs0KUhJMW2ULgABMKmXAQADAgADeAADNQQ')
+    react_id.append(m.id)
+    
 @bot.message_handler(commands=["del"])
 def msg_del(message):
     bot.delete_message(chat_id=message.chat.id, message_id=message.reply_to_message.id)
@@ -419,7 +420,6 @@ def msg_title(message):
 
 @bot.message_reaction_handler()
 def msg_reaction(event):
-    bot.send_message(SERVICE_CHATID, f'Пришло')
     if event.message_id in react_id:
         bot.delete_message(chat_id=event.chat.id, message_id=event.message_id)
         chel = html.escape(event.user.full_name, quote = True)
@@ -508,7 +508,7 @@ def jobday():
             {"role": "system", "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины'},
             {"role": "user", "content": "Напиши короткое необычное пожелание доброго утра для жителей Некославии"}
         ],
-        model="llama-3.1-70b-versatile"
+        model="llama3-70b-8192"
     )
     response = chat_completion.choices[0].message.content
     print(response)
