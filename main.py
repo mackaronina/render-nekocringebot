@@ -226,19 +226,26 @@ def msg_pet(message):
 
 @bot.message_handler(commands=["say"])
 def msg_say(message):
-        if message.reply_to_message is None or (message.reply_to_message.text is None and message.reply_to_message.caption is None):
-            bot.send_message(message.chat.id, 'Ответом на текст еблан',reply_to_message_id=message.message_id)
+        if message.reply_to_message is None or (message.reply_to_message.text is None and message.reply_to_message.photo is None):
+            bot.send_message(message.chat.id, 'Ответом на текст или фото еблан',reply_to_message_id=message.message_id)
             return
-        with Image.open('necoarc.png') as img:
-            draw = ImageDraw.Draw(img)
-            if message.reply_to_message.text is not None:
-                text = message.reply_to_message.text
-            else:
-                text = message.reply_to_message.caption
-            draw_text_rectangle(draw, text, 220, 106, 336, 80)
-            bot.add_sticker_to_set(user_id=7258570440, name='sayneko_by_NekocringeBot', emojis='🫵',png_sticker=send_pil(img))
-            sset = bot.get_sticker_set('sayneko_by_NekocringeBot')
-            bot.send_sticker(message.chat.id, sset.stickers[-1].file_id)
+        if message.reply_to_message.photo is None:
+            with Image.open('necoarc.png') as img:
+                draw = ImageDraw.Draw(img)
+                draw_text_rectangle(draw, message.reply_to_message.text, 220, 106, 336, 80)
+                bot.add_sticker_to_set(user_id=7258570440, name='sayneko_by_NekocringeBot', emojis='🫵',png_sticker=send_pil(img))
+                sset = bot.get_sticker_set('sayneko_by_NekocringeBot')
+                bot.send_sticker(message.chat.id, sset.stickers[-1].file_id)
+        else:
+            with Image.open('necopic.png') as im2:
+                im1 = get_pil(message.reply_to_message.photo[-1].file_id)
+                im1 = im1.resize((253, 169),  Image.ANTIALIAS)
+                im0 = Image.new(mode = 'RGB',size = (512,512))
+                im0.paste(im1.convert('RGB'), (243,334))
+                im0.paste(im2.convert('RGB'), (0,0), im2)
+                bot.add_sticker_to_set(user_id=7258570440, name='sayneko_by_NekocringeBot', emojis='🫵',png_sticker=send_pil(im0))
+                sset = bot.get_sticker_set('sayneko_by_NekocringeBot')
+                bot.send_sticker(message.chat.id, sset.stickers[-1].file_id)
 
 @bot.message_handler(commands=["cube"])
 def msg_cube(message):
