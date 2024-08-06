@@ -82,6 +82,7 @@ nekosas = [
 SERVICE_CHATID = -1002171923232
 NEKOSLAVIA_CHATID = -1001268892138
 ME_CHATID = 7258570440
+BOT_ID = 6990957141
 TIMESTAMP = 3*3600
 
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
@@ -333,7 +334,7 @@ def handle_text(message, txt):
                 bot.send_message(message.chat.id, 'Именинника спросить забыли',reply_to_message_id=message.message_id)
                 return
         '''
-        if message.reply_to_message is not None and message.reply_to_message.from_user.id == bot.get_me().id:
+        if message.reply_to_message is not None and message.reply_to_message.from_user.id == BOT_ID:
             bot.send_message(message.chat.id, 'Хохла спросить забыли',reply_to_message_id=message.message_id)
         elif message.chat.id == message.from_user.id:
             bot.send_message(NEKOSLAVIA_CHATID, f'Кто-то высрал: {txt}')
