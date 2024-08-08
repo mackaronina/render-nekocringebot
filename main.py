@@ -1,5 +1,5 @@
 import telebot
-from telebot import types
+from telebot import types, apihelper
 from flask import Flask, request, send_from_directory, send_file, jsonify, render_template, url_for
 from petpetgif.saveGif import save_transparent_gif
 from io import BytesIO, StringIO
@@ -49,6 +49,7 @@ class ExHandler(telebot.ExceptionHandler):
         return True
 
 bot = telebot.TeleBot(token, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
+apihelper.RETRY_ON_ERROR = True
 
 blocked_messages = []
 blocked_users = []
