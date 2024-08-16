@@ -454,7 +454,20 @@ def send_paint():
         bio.name = 'result.png'
         file.save(bio)
         bio.seek(0)
-        bot.send_photo(NEKOSLAVIA_CHATID,photo = bio)
+        mp = CurlMime()
+        mp.addpart(
+            name="file",
+            content_type="image/png",
+            filename="result.png",
+            data=bio.getvalue()
+        )
+        with requests.Session() as s:
+            p = s.post('https://telegra.ph/upload', multipart=mp, impersonate="chrome110")
+        keypic = p.json()[0]['src'].replace('/file/','').replace('.png','')
+        markup = telebot.types.InlineKeyboardMarkup()
+        button1 = telebot.types.InlineKeyboardButton("Дорисовать 🎨", url=f'https://t.me/NekocringeBot/paint?startapp={keypic}')
+        markup.add(button1)
+        bot.send_photo(NEKOSLAVIA_CHATID, photo=bio, reply_markup=markup)
         return '!', 200
 
 @app.route('/paint')
