@@ -470,6 +470,16 @@ def send_paint():
         bot.send_photo(NEKOSLAVIA_CHATID, photo=bio, reply_markup=markup)
         return '!', 200
 
+@app.route('/pic/<picid>')
+def get_pic(picid):
+    bio = BytesIO()
+    bio.name = 'result.png'
+    with requests.Session() as s:
+        p = s.get(f"https://telegra.ph/file/{picid}.png", impersonate="chrome110")
+    bio.write(p.content)
+    bio.seek(0)
+    return send_file(bio, mimetype='image/png')
+
 @app.route('/paint')
 def get_paint():
         return render_template("paint.html")
