@@ -229,10 +229,9 @@
 	if(tg.initDataUnsafe.start_param) {
 		let argimg = new Image();
 		argimg.src = "https://telegra.ph/file/"+tg.initDataUnsafe.start_param+".png";
+		argimg.crossOrigin = "anonymous";
 		argimg.onload = ()=> {
-			createImageBitmap(argimg).then(function (img) {
-				context.drawImage(img, 0, 0);
-			});
+			context.drawImage(argimg, 0, 0);
 		};       
 	}
 
