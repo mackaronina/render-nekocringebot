@@ -81,6 +81,7 @@
 </body>
 
 <script>
+	let argimg = new Image();
 	let canvlist = [];
 	let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
 	tg.expand(); //расширяем на все окно  
@@ -220,14 +221,17 @@
 		canvas.toBlob(function(blob){
 			canvlist.push(blob);
 		},'image/png');
-		for (step = 0; step < 3; step++ ){
-			context.rect(0, 0, 400, 400);
-			context.fill();	
+		if (tg.initDataUnsafe.start_param) {
+			context.drawImage(argimg, 0, 0);
+		} else {
+			for (step = 0; step < 3; step++ ){
+				context.rect(0, 0, 400, 400);
+				context.fill();	
+			}
 		}
 	});
 
 	if(tg.initDataUnsafe.start_param) {
-		let argimg = new Image();
 		argimg.src = "/pic/"+tg.initDataUnsafe.start_param;
 		argimg.onload = ()=> {
 			context.drawImage(argimg, 0, 0);
