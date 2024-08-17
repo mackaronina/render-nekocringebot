@@ -124,11 +124,6 @@
 	context.strokeStyle = "black";
 	context.lineCap = "round";
 	context.lineJoin = "round";
-	if(tg.initDataUnsafe.start_param) {
-		const img = new Image();
-		img.src = "https://telegra.ph/file/"+tg.initDataUnsafe.start_param+".png";
-		img.onload = ()=> context.drawImage(img, 0, 0);       
-	}
 	
 	canvas.addEventListener("mousedown", function(e){
 		let ClientRect = this.getBoundingClientRect();
@@ -230,9 +225,12 @@
 			context.fill();	
 		}
 	});
-	//работает только в attachment menu
-	// let pic = document.createElement('img'); //создаем img
-	// pic.src = tg.initDataUnsafe.user.photo_url; //задаём src 
-	// usercard.appendChild(pic); //добавляем элемент в карточку 
+
+	if(tg.initDataUnsafe.start_param) {
+		let argimg = new Image();
+		argimg.src = "https://telegra.ph/file/"+tg.initDataUnsafe.start_param+".png";
+		argimg.onload = ()=> context.drawImage(argimg, 0, 0);       
+	}
+
 </script>
 </html>
