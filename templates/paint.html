@@ -228,8 +228,8 @@
 
 	if(tg.initDataUnsafe.start_param) {
 		let argimg = new Image();
+		argimg.setAttribute('crossorigin', 'anonymous');
 		argimg.src = "https://telegra.ph/file/"+tg.initDataUnsafe.start_param+".png";
-		argimg.crossOrigin = "anonymous";
 		argimg.onload = ()=> {
 			context.drawImage(argimg, 0, 0);
 		};       
