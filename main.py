@@ -95,60 +95,64 @@ react_id = []
 monsters_db = {}
 
 def get_monsters():
-    links = [
-    "https://www.monsterenergy.com/en-us/energy-drinks/",
-    "https://www.monsterenergy.com/de-at/energy-drinks/",
-    "https://www.monsterenergy.com/en-au/energy-drinks/",
-    "https://www.monsterenergy.com/hr-ba/energy-drinks/",
-    "https://www.monsterenergy.com/sr-ba/energy-drinks/",
-    "https://www.monsterenergy.com/fr-be/energy-drinks/",
-    "https://www.monsterenergy.com/nl-be/energy-drinks/",
-    "https://www.monsterenergy.com/bg-bg/energy-drinks/",
-    "https://www.monsterenergy.com/en-ca/energy-drinks/",
-    "https://www.monsterenergy.com/fr-ca/energy-drinks/",
-    "https://www.monsterenergy.com/de-ch/energy-drinks/",
-    "https://www.monsterenergy.com/fr-ch/energy-drinks/",
-    "https://www.monsterenergy.com/it-ch/energy-drinks/",
-    "https://www.monsterenergy.com/el-cy/energy-drinks/",
-    "https://www.monsterenergy.com/cs-cz/energy-drinks/",
-    "https://www.monsterenergy.com/de-de/energy-drinks/",
-    "https://www.monsterenergy.com/da-dk/energy-drinks/",
-    "https://www.monsterenergy.com/et-ee/energy-drinks/",
-    "https://www.monsterenergy.com/es-es/energy-drinks/",
-    "https://www.monsterenergy.com/fr-fr/energy-drinks/",
-    "https://www.monsterenergy.com/en-gb/energy-drinks/",
-    "https://www.monsterenergy.com/el-gr/energy-drinks/",
-    "https://www.monsterenergy.com/hr-hr/energy-drinks/",
-    "https://www.monsterenergy.com/hu-hu/energy-drinks/",
-    "https://www.monsterenergy.com/en-ie/energy-drinks/",
-    "https://www.monsterenergy.com/en-in/energy-drinks/",
-    "https://www.monsterenergy.com/it-it/energy-drinks/",
-    "https://www.monsterenergy.com/ja-jp/energy-drinks/",
-    "https://www.monsterenergy.com/lt-lt/energy-drinks/",
-    "https://www.monsterenergy.com/lv-lv/energy-drinks/",
-    "https://www.monsterenergy.com/nl-nl/energy-drinks/",
-    "https://www.monsterenergy.com/no-no/energy-drinks/",
-    "https://www.monsterenergy.com/en-nz/energy-drinks/",
-    "https://www.monsterenergy.com/pl-pl/energy-drinks/",
-    "https://www.monsterenergy.com/pt-pt/energy-drinks/",
-    "https://www.monsterenergy.com/ro-ro/energy-drinks/",
-    "https://www.monsterenergy.com/sr-rs/energy-drinks/",
-    "https://www.monsterenergy.com/sv-se/energy-drinks/",
-    "https://www.monsterenergy.com/sl-si/energy-drinks/",
-    "https://www.monsterenergy.com/sk-sk/energy-drinks/",
-    "https://www.monsterenergy.com/uk-ua/energy-drinks/",
-    "https://www.monsterenergy.com/en-us/energy-drinks/",
-    "https://www.monsterenergy.com/en-za/energy-drinks/"
-    ]
-    for link in links:
-        with requests.Session() as s:
-            p = s.get(link, impersonate="chrome110")
-            soup = BeautifulSoup(p.text, 'lxml')
-            allm = soup.findAll('div', class_='col-12 col-lg-12')
-            for monster in allm:
-                img = monster.find('img')
-                if img is not None:
-                    monsters_db[img['alt']] = img['src']
+    try:
+        links = [
+        "https://www.monsterenergy.com/en-us/energy-drinks/",
+        "https://www.monsterenergy.com/de-at/energy-drinks/",
+        "https://www.monsterenergy.com/en-au/energy-drinks/",
+        "https://www.monsterenergy.com/hr-ba/energy-drinks/",
+        "https://www.monsterenergy.com/sr-ba/energy-drinks/",
+        "https://www.monsterenergy.com/fr-be/energy-drinks/",
+        "https://www.monsterenergy.com/nl-be/energy-drinks/",
+        "https://www.monsterenergy.com/bg-bg/energy-drinks/",
+        "https://www.monsterenergy.com/en-ca/energy-drinks/",
+        "https://www.monsterenergy.com/fr-ca/energy-drinks/",
+        "https://www.monsterenergy.com/de-ch/energy-drinks/",
+        "https://www.monsterenergy.com/fr-ch/energy-drinks/",
+        "https://www.monsterenergy.com/it-ch/energy-drinks/",
+        "https://www.monsterenergy.com/el-cy/energy-drinks/",
+        "https://www.monsterenergy.com/cs-cz/energy-drinks/",
+        "https://www.monsterenergy.com/de-de/energy-drinks/",
+        "https://www.monsterenergy.com/da-dk/energy-drinks/",
+        "https://www.monsterenergy.com/et-ee/energy-drinks/",
+        "https://www.monsterenergy.com/es-es/energy-drinks/",
+        "https://www.monsterenergy.com/fr-fr/energy-drinks/",
+        "https://www.monsterenergy.com/en-gb/energy-drinks/",
+        "https://www.monsterenergy.com/el-gr/energy-drinks/",
+        "https://www.monsterenergy.com/hr-hr/energy-drinks/",
+        "https://www.monsterenergy.com/hu-hu/energy-drinks/",
+        "https://www.monsterenergy.com/en-ie/energy-drinks/",
+        "https://www.monsterenergy.com/en-in/energy-drinks/",
+        "https://www.monsterenergy.com/it-it/energy-drinks/",
+        "https://www.monsterenergy.com/ja-jp/energy-drinks/",
+        "https://www.monsterenergy.com/lt-lt/energy-drinks/",
+        "https://www.monsterenergy.com/lv-lv/energy-drinks/",
+        "https://www.monsterenergy.com/nl-nl/energy-drinks/",
+        "https://www.monsterenergy.com/no-no/energy-drinks/",
+        "https://www.monsterenergy.com/en-nz/energy-drinks/",
+        "https://www.monsterenergy.com/pl-pl/energy-drinks/",
+        "https://www.monsterenergy.com/pt-pt/energy-drinks/",
+        "https://www.monsterenergy.com/ro-ro/energy-drinks/",
+        "https://www.monsterenergy.com/sr-rs/energy-drinks/",
+        "https://www.monsterenergy.com/sv-se/energy-drinks/",
+        "https://www.monsterenergy.com/sl-si/energy-drinks/",
+        "https://www.monsterenergy.com/sk-sk/energy-drinks/",
+        "https://www.monsterenergy.com/uk-ua/energy-drinks/",
+        "https://www.monsterenergy.com/en-us/energy-drinks/",
+        "https://www.monsterenergy.com/en-za/energy-drinks/"
+        ]
+        for link in links:
+            with requests.Session() as s:
+                p = s.get(link, impersonate="chrome110")
+                soup = BeautifulSoup(p.text, 'lxml')
+                allm = soup.findAll('div', class_='col-12 col-lg-12')
+                for monster in allm:
+                    img = monster.find('img')
+                    if img is not None:
+                        monsters_db[img['alt']] = img['src']
+        bot.send_message(ME_CHATID, len(monsters_db))
+    except Exception as e:
+        bot.send_message(ME_CHATID, e)
 
 def dominant_color(image):
     width, height = 150,150
@@ -222,6 +226,15 @@ def get_pil(fid):
     im = Image.open(BytesIO(downloaded_file))
     return im
 
+def get_bio_link(link):
+    bio = BytesIO()
+    bio.name = 'result.png'
+    with requests.Session() as s:
+        p = s.get(link, impersonate="chrome110")
+    bio.write(p.content)
+    bio.seek(0)
+    return bio
+
 def send_pil(im):
     bio = BytesIO()
     bio.name = 'result.png'
@@ -264,7 +277,12 @@ def msg_monster(message):
         bot.send_message(message.chat.id, 'Иди нахуй', reply_to_message_id=message.message_id)
         return
     item = random.choice(list(monsters_db.items()))
-    bot.send_photo(message.chat.id, photo=item[1], caption=item[0], reply_to_message_id=message.message_id)
+    bio = get_bio_link(item[1])
+    im = Image.open(bio)
+    w, h = im.size
+    im0 = Image.new(mode='RGB', size=(h,h))
+    im0.paste(im.convert('RGB'), (round((h-w)/2), 0))
+    bot.send_photo(message.chat.id, photo=send_pil(im0), caption=item[0], reply_to_message_id=message.message_id)
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
@@ -537,12 +555,7 @@ def send_paint():
 
 @app.route('/pic/<picid>')
 def get_pic(picid):
-    bio = BytesIO()
-    bio.name = 'result.png'
-    with requests.Session() as s:
-        p = s.get(f"https://telegra.ph/file/{picid}.png", impersonate="chrome110")
-    bio.write(p.content)
-    bio.seek(0)
+    bio = get_bio_link(f"https://telegra.ph/file/{picid}.png")
     return send_file(bio, mimetype='image/png')
 
 @app.route('/paint')
