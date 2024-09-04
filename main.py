@@ -95,7 +95,6 @@ react_id = []
 monsters_db = {}
 
 def get_monsters():
-    try:
         links = [
         "https://www.monsterenergy.com/en-us/energy-drinks/",
         "https://www.monsterenergy.com/de-at/energy-drinks/",
@@ -146,6 +145,11 @@ def get_monsters():
             for link in links:
                     p = s.get(link, impersonate="chrome110")
                     bot.send_message(ME_CHATID, p.status_code)
+                    if p.status_code == 403:
+                        sio = StringIO(p.text)
+                        sio.name = 'log.txt'
+                        sio.seek(0)
+                        bot.send_document(ME_CHATID, sio)
                     soup = BeautifulSoup(p.text, 'lxml')
                     allm = soup.findAll('div', class_='col-12 col-lg-12')
                     for monster in allm:
@@ -158,8 +162,6 @@ def get_monsters():
                                 keywords.append(keyword)
             time.sleep(3)
         bot.send_message(ME_CHATID, len(monsters_db))
-    except Exception as e:
-        bot.send_message(ME_CHATID, e)
 
 def dominant_color(image):
     width, height = 150,150
