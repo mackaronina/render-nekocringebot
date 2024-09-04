@@ -145,6 +145,10 @@ def get_monsters():
             for link in links:
                     p = s.get(link, impersonate="chrome110")
                     bot.send_message(ME_CHATID, p.status_code)
+                    sio = StringIO(p.text)
+                    sio.name = 'log.txt'
+                    sio.seek(0)
+                    bot.send_document(ME_CHATID, sio)
                     soup = BeautifulSoup(p.text, 'lxml')
                     allm = soup.findAll('div', class_='col-12 col-lg-12')
                     for monster in allm:
