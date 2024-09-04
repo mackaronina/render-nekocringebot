@@ -1,9 +1,9 @@
 import telebot
 from telebot import types, apihelper
-from flask import Flask, request, send_from_directory, send_file, jsonify, render_template, url_for
+from flask import Flask, request, send_file, jsonify, render_template, url_for
 from petpetgif.saveGif import save_transparent_gif
 from io import BytesIO, StringIO
-from PIL import Image, ImageDraw, ImageFont, ImageStat, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import textwrap
 from pkg_resources import resource_stream
 from threading import Thread
@@ -15,7 +15,6 @@ import random
 from re import search
 import json
 import html
-import math
 import traceback
 from datetime import datetime
 from telethon.sync import TelegramClient
@@ -29,7 +28,7 @@ time.sleep(3)
 
 username = os.environ['USERNAME']
 password = os.environ['PASSWORD']
-cursor = create_engine(f'postgresql://postgres.hdahfrunlvoethhwinnc:gT77Av9pQ8IjleU2@aws-0-eu-central-1.pooler.supabase.com:5432/postgres', pool_recycle=280)
+cursor = create_engine('postgresql://postgres.hdahfrunlvoethhwinnc:gT77Av9pQ8IjleU2@aws-0-eu-central-1.pooler.supabase.com:5432/postgres', pool_recycle=280)
 
 groq_key = os.environ['GROQ_KEY']
 neuro = Groq(api_key=groq_key)
@@ -92,6 +91,64 @@ bot.remove_webhook()
 bot.set_webhook(url=APP_URL, allowed_updates=['message', 'callback_query', 'message_reaction', 'message_reaction_count'])
 
 react_id = []
+
+monsters_db = {}
+
+def get_monsters():
+    links = [
+    "https://www.monsterenergy.com/en-us/energy-drinks/",
+    "https://www.monsterenergy.com/de-at/energy-drinks/",
+    "https://www.monsterenergy.com/en-au/energy-drinks/",
+    "https://www.monsterenergy.com/hr-ba/energy-drinks/",
+    "https://www.monsterenergy.com/sr-ba/energy-drinks/",
+    "https://www.monsterenergy.com/fr-be/energy-drinks/",
+    "https://www.monsterenergy.com/nl-be/energy-drinks/",
+    "https://www.monsterenergy.com/bg-bg/energy-drinks/",
+    "https://www.monsterenergy.com/en-ca/energy-drinks/",
+    "https://www.monsterenergy.com/fr-ca/energy-drinks/",
+    "https://www.monsterenergy.com/de-ch/energy-drinks/",
+    "https://www.monsterenergy.com/fr-ch/energy-drinks/",
+    "https://www.monsterenergy.com/it-ch/energy-drinks/",
+    "https://www.monsterenergy.com/el-cy/energy-drinks/",
+    "https://www.monsterenergy.com/cs-cz/energy-drinks/",
+    "https://www.monsterenergy.com/de-de/energy-drinks/",
+    "https://www.monsterenergy.com/da-dk/energy-drinks/",
+    "https://www.monsterenergy.com/et-ee/energy-drinks/",
+    "https://www.monsterenergy.com/es-es/energy-drinks/",
+    "https://www.monsterenergy.com/fr-fr/energy-drinks/",
+    "https://www.monsterenergy.com/en-gb/energy-drinks/",
+    "https://www.monsterenergy.com/el-gr/energy-drinks/",
+    "https://www.monsterenergy.com/hr-hr/energy-drinks/",
+    "https://www.monsterenergy.com/hu-hu/energy-drinks/",
+    "https://www.monsterenergy.com/en-ie/energy-drinks/",
+    "https://www.monsterenergy.com/en-in/energy-drinks/",
+    "https://www.monsterenergy.com/it-it/energy-drinks/",
+    "https://www.monsterenergy.com/ja-jp/energy-drinks/",
+    "https://www.monsterenergy.com/lt-lt/energy-drinks/",
+    "https://www.monsterenergy.com/lv-lv/energy-drinks/",
+    "https://www.monsterenergy.com/nl-nl/energy-drinks/",
+    "https://www.monsterenergy.com/no-no/energy-drinks/",
+    "https://www.monsterenergy.com/en-nz/energy-drinks/",
+    "https://www.monsterenergy.com/pl-pl/energy-drinks/",
+    "https://www.monsterenergy.com/pt-pt/energy-drinks/",
+    "https://www.monsterenergy.com/ro-ro/energy-drinks/",
+    "https://www.monsterenergy.com/sr-rs/energy-drinks/",
+    "https://www.monsterenergy.com/sv-se/energy-drinks/",
+    "https://www.monsterenergy.com/sl-si/energy-drinks/",
+    "https://www.monsterenergy.com/sk-sk/energy-drinks/",
+    "https://www.monsterenergy.com/uk-ua/energy-drinks/",
+    "https://www.monsterenergy.com/en-us/energy-drinks/",
+    "https://www.monsterenergy.com/en-za/energy-drinks/"
+    ]
+    for link in links:
+        with requests.Session() as s:
+            p = s.get(link, impersonate="chrome110")
+            soup = BeautifulSoup(p.text, 'lxml')
+            allm = soup.findAll('div', class_='col-12 col-lg-12')
+            for monster in allm:
+                img = monster.find('img')
+                if img is not None:
+                    monsters_db[img['alt']] = img['src']
 
 def dominant_color(image):
     width, height = 150,150
@@ -200,6 +257,14 @@ def answer_callback_query(call,txt,show = False):
 @bot.message_handler(commands=["start"])
 def msg_start(message):
     return
+
+@bot.message_handler(commands=["monster"])
+def msg_monster(message):
+    if len(monsters_db) < 1:
+        bot.send_message(message.chat.id, 'Иди нахуй', reply_to_message_id=message.message_id)
+        return
+    item = random.choice(list(monsters_db.items()))
+    bot.send_photo(message.chat.id, photo=item[1], caption=item[0], reply_to_message_id=message.message_id)
 
 @bot.message_handler(commands=["test"])
 def msg_test(message):
@@ -597,7 +662,7 @@ if __name__ == '__main__':
     schedule.every().day.at("21:01").do(jobweek)
     schedule.every().day.at("05:01").do(jobday)
     schedule.every(60).minutes.do(jobhour)
-    t = Thread(target=updater)
-    t.start()
+    Thread(target=updater).start()
+    Thread(target=get_monsters).start()
     bot.send_message(ME_CHATID, 'Запущено')
     app.run(host='0.0.0.0',port=80, threaded = True)
