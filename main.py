@@ -141,15 +141,17 @@ def get_monsters():
         "https://www.monsterenergy.com/en-us/energy-drinks/",
         "https://www.monsterenergy.com/en-za/energy-drinks/"
         ]
-        for link in links:
-            with requests.Session() as s:
-                p = s.get(link, impersonate="chrome110")
-                soup = BeautifulSoup(p.text, 'lxml')
-                allm = soup.findAll('div', class_='col-12 col-lg-12')
-                for monster in allm:
-                    img = monster.find('img')
-                    if img is not None:
-                        monsters_db[img['alt']] = img['src']
+        with requests.Session() as s:
+            for link in links:
+                    p = s.get(link, impersonate="chrome110")
+                    bot.send_message(ME_CHATID, p.status_code)
+                    soup = BeautifulSoup(p.text, 'lxml')
+                    allm = soup.findAll('div', class_='col-12 col-lg-12')
+                    for monster in allm:
+                        img = monster.find('img')
+                        if img is not None:
+                            monsters_db[img['alt']] = img['src']
+            time.sleep(3)
         bot.send_message(ME_CHATID, len(monsters_db))
     except Exception as e:
         bot.send_message(ME_CHATID, e)
@@ -281,7 +283,7 @@ def msg_monster(message):
     im = Image.open(bio)
     w, h = im.size
     im0 = Image.new(mode='RGB', size=(h,h), color='#FFFFFF')
-    im0.paste(im.convert('RGB'), (round((h-w)/2), 0))
+    im0.paste(im.convert('RGB'), (round((h-w)/2), 0), im)
     bot.send_photo(message.chat.id, photo=send_pil(im0), caption=item[0], reply_to_message_id=message.message_id)
 
 @bot.message_handler(commands=["test"])
