@@ -141,20 +141,21 @@ def get_monsters():
         "https://www.monsterenergy.com/en-us/energy-drinks/",
         "https://www.monsterenergy.com/en-za/energy-drinks/"
         ]
+        keywords = []
         with requests.Session() as s:
             for link in links:
                     p = s.get(link, impersonate="chrome110")
                     bot.send_message(ME_CHATID, p.status_code)
-                    sio = StringIO(p.text)
-                    sio.name = 'log.txt'
-                    sio.seek(0)
-                    bot.send_document(ME_CHATID, sio)
                     soup = BeautifulSoup(p.text, 'lxml')
                     allm = soup.findAll('div', class_='col-12 col-lg-12')
                     for monster in allm:
                         img = monster.find('img')
-                        if img is not None:
-                            monsters_db[img['alt']] = img['src']
+                        a = monster.find('a')
+                        if img is not None and a is not None:
+                            keyword = a['href'].split('/')[-2]
+                            if keyword not in keywords:
+                                monsters_db[img['alt']] = img['src']
+                                keywords.append(keyword)
             time.sleep(3)
         bot.send_message(ME_CHATID, len(monsters_db))
     except Exception as e:
