@@ -280,7 +280,7 @@ def msg_monster(message):
     bio = get_bio_link(item[1])
     im = Image.open(bio)
     w, h = im.size
-    im0 = Image.new(mode='RGB', size=(h,h))
+    im0 = Image.new(mode='RGB', size=(h,h), color='#FFFFFF')
     im0.paste(im.convert('RGB'), (round((h-w)/2), 0))
     bot.send_photo(message.chat.id, photo=send_pil(im0), caption=item[0], reply_to_message_id=message.message_id)
 
