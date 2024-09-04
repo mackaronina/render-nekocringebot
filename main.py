@@ -143,7 +143,7 @@ def get_monsters():
         keywords = []
         with requests.Session() as s:
             for link in links:
-                    p = s.get(link, impersonate="chrome110")
+                    p = s.get(link, impersonate="safari_ios")
                     bot.send_message(ME_CHATID, p.status_code)
                     if p.status_code == 403:
                         sio = StringIO(p.text)
@@ -160,7 +160,7 @@ def get_monsters():
                             if keyword not in keywords:
                                 monsters_db[img['alt']] = img['src']
                                 keywords.append(keyword)
-            time.sleep(3)
+                    time.sleep(3)
         bot.send_message(ME_CHATID, len(monsters_db))
 
 def dominant_color(image):
