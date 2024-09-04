@@ -143,7 +143,7 @@ def get_monsters():
         keywords = []
         with requests.Session() as s:
             for link in links:
-                    p = s.get(link, impersonate="chrome110")
+                    p = s.get(link, impersonate="edge101")
                     bot.send_message(ME_CHATID, p.status_code)
                     if p.status_code == 403:
                         sio = StringIO(p.text)
