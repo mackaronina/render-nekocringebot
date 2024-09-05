@@ -23,7 +23,7 @@ import asyncio
 from sqlalchemy import create_engine
 import os
 from groq import Groq
-import undetected_chromedriver as uc
+import cloudscraper
 
 time.sleep(3)
 
@@ -142,21 +142,26 @@ def get_monsters():
         "https://www.monsterenergy.com/en-za/energy-drinks/"
         ]
         keywords = []
-        with uc.Chrome(use_subprocess=False) as driver:
-            for link in links:
-                    driver.get(link, impersonate="edge101")
-                    html = driver.page_source
-                    soup = BeautifulSoup(html, 'lxml')
-                    allm = soup.findAll('div', class_='col-12 col-lg-12')
-                    for monster in allm:
-                        img = monster.find('img')
-                        a = monster.find('a')
-                        if img is not None and a is not None:
-                            keyword = a['href'].split('/')[-2]
-                            if keyword not in keywords:
-                                monsters_db[img['alt']] = img['src']
-                                keywords.append(keyword)
-                    time.sleep(3)
+        scraper = cloudscraper.create_scraper()
+        for link in links:
+            p = scraper.get(link)
+            bot.send_message(ME_CHATID, p.status_code)
+            if p.status_code == 403:
+                sio = StringIO(p.text)
+                sio.name = 'log.txt'
+                sio.seek(0)
+                bot.send_document(ME_CHATID, sio)
+            soup = BeautifulSoup(p.text, 'lxml')
+            allm = soup.findAll('div', class_='col-12 col-lg-12')
+            for monster in allm:
+                img = monster.find('img')
+                a = monster.find('a')
+                if img is not None and a is not None:
+                    keyword = a['href'].split('/')[-2]
+                    if keyword not in keywords:
+                        monsters_db[img['alt']] = img['src']
+                        keywords.append(keyword)
+            time.sleep(3)
         bot.send_message(ME_CHATID, len(monsters_db))
 
 def dominant_color(image):
