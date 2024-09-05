@@ -23,6 +23,7 @@ import asyncio
 from sqlalchemy import create_engine
 import os
 from groq import Groq
+import undetected_chromedriver as uc
 
 time.sleep(3)
 
@@ -141,16 +142,11 @@ def get_monsters():
         "https://www.monsterenergy.com/en-za/energy-drinks/"
         ]
         keywords = []
-        with requests.Session() as s:
+        with uc.Chrome(use_subprocess=False) as driver:
             for link in links:
-                    p = s.get(link, impersonate="edge101")
-                    bot.send_message(ME_CHATID, p.status_code)
-                    if p.status_code == 403:
-                        sio = StringIO(p.text)
-                        sio.name = 'log.txt'
-                        sio.seek(0)
-                        bot.send_document(ME_CHATID, sio)
-                    soup = BeautifulSoup(p.text, 'lxml')
+                    driver.get(link, impersonate="edge101")
+                    html = driver.page_source
+                    soup = BeautifulSoup(html, 'lxml')
                     allm = soup.findAll('div', class_='col-12 col-lg-12')
                     for monster in allm:
                         img = monster.find('img')
