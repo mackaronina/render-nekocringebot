@@ -1,10 +1,7 @@
-screen.orientation.lock('landscape')
-    .then(() => console.log('locked'))
-    .catch(() => console.log('fail'));
 let game;
-const ratio = Math.max(window.screen.width / window.screen.height, window.screen.height / window.screen.width)
-const DEFAULT_HEIGHT = 600
-const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT
+const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
+const DEFAULT_HEIGHT = 600;
+const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT;
 let gameOptions = {
     // start vertical point of the terrain, 0 = very top; 1 = very bottom
     startTerrainHeight: 0.5,
@@ -54,8 +51,7 @@ window.onload = function() {
             autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
             width: DEFAULT_WIDTH,
-            height: DEFAULT_HEIGHT,
-            orientation: 'landscape'
+            height: DEFAULT_HEIGHT
         },
         physics: {
             default: "matter",
@@ -449,8 +445,6 @@ class playGame extends Phaser.Scene {
 
     // method to accelerate
     accelerate() {
-        this.scale.startFullscreen();
-        this.scale.lockOrientation('landscape');
         this.acceleration = gameOptions.carAcceleration[0]
     }
 
