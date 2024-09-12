@@ -164,8 +164,8 @@ class playGame extends Phaser.Scene {
                     this.sndMonodori.stop();
                     this.sndDeath.play();
                     this.dead = true;
+                    upd_score(this.coins);
                     this.time.delayedCall(4000, () => {
-                        upd_score(this.coins);
                         this.scene.restart();
                     });
                 }
