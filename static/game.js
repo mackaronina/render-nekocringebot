@@ -33,15 +33,6 @@ async function upd_score(coins) {
         body: JSON.stringify({ user_id: params.get('user_id'), score: coins, message_id: params.get('message_id') })
     });
 }
-
-function loadFont(name, url) {
-    let newFont = new FontFace(name, `url(${url})`);
-    newFont.load().then(function(loaded) {
-        document.fonts.add(loaded);
-    }).catch(function(error) {
-        return error;
-    });
-}
 window.addEventListener("orientationchange", function() {
     document.location.reload();
 });
@@ -64,7 +55,8 @@ window.onload = function() {
         },
         scene: playGame
     }
-    game = new Phaser.Game(gameConfig);
+    if (window.innerWidth >= window.innerHeight)
+        game = new Phaser.Game(gameConfig);
     window.focus();
 }
 
@@ -99,7 +91,6 @@ class playGame extends Phaser.Scene {
             frameWidth: 225,
             frameHeight: 225
         });
-        loadFont("pixelfont", "static/PixelCyrNormal.ttf");
         this.load.audio("sndCollect", "static/collect.mp3");
         this.load.audio("sndDeath", "static/death.mp3");
         this.load.audio("sndMonodori", "static/monodori.mp3");
@@ -153,7 +144,7 @@ class playGame extends Phaser.Scene {
         this.acceleration = 0;
         // text object with terrain information
         this.coinInfo = this.add.text(this.game.config.width * 0.5, 70, "0", {
-            fontFamily: "pixelfont",
+            fontFamily: "Pixel Cyr",
             fontSize: 80,
             fontStyle: 'bold',
             color: "#f5f5f5",
@@ -300,9 +291,9 @@ class playGame extends Phaser.Scene {
             this.coindist += 1;
             if (this.coindist >= 20) {
                 this.coindist = 0;
-                let coin = this.matter.add.sprite(center.x + mountainStart.x, center.y - 70, 'coin');
-                coin.setDisplaySize(60, 60);
-                coin.setCircle(30, {
+                let coin = this.matter.add.sprite(center.x + mountainStart.x, center.y - 90, 'coin');
+                coin.setDisplaySize(80, 80);
+                coin.setCircle(40, {
                     label: 'coin',
                     isStatic: true,
                     friction: 1,
