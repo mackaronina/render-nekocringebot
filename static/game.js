@@ -1,5 +1,5 @@
 let game;
-const ratio = Math.max(window.screen.width / window.screen.height, window.screen.height / window.screen.width);
+const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
 const DEFAULT_HEIGHT = 600;
 const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT;
 let gameOptions = {
@@ -42,7 +42,9 @@ function loadFont(name, url) {
         return error;
     });
 }
-
+window.addEventListener("orientationchange", function() {
+    document.location.reload();
+});
 window.onload = function() {
     let gameConfig = {
         type: Phaser.AUTO,
