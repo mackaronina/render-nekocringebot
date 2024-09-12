@@ -23,14 +23,14 @@ let gameOptions = {
     mountainColorsLineWidth: [0, 200]
 }
 
-async function upd_score(score) {
+async function upd_score(coins) {
     let params = new URLSearchParams(document.location.search);
     await fetch("/game/update_score", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
-        body: JSON.stringify({ user_id: params.get('user_id'), score: score, message_id: params.get('message_id') })
+        body: JSON.stringify({ user_id: params.get('user_id'), score: coins, message_id: params.get('message_id') })
     });
 }
 
@@ -174,8 +174,10 @@ class playGame extends Phaser.Scene {
                     this.sndMonodori.stop();
                     this.sndDeath.play();
                     this.dead = true;
-                    upd_score(this.score);
-                    this.time.delayedCall(4000, () => { this.scene.restart() });
+                    this.time.delayedCall(4000, () => {
+                        upd_score(this.coins);
+                        this.scene.restart();
+                    });
                 }
             } else if ((bodyA.label == "car" && bodyB.label == "coin") || (bodyB.label == "car" && bodyA.label == "coin") ||
                 (bodyA.label == "wheel" && bodyB.label == "coin") || (bodyB.label == "wheel" && bodyA.label == "coin")) {
