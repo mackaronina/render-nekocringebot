@@ -1,7 +1,7 @@
 let game;
 const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
-const DEFAULT_HEIGHT = 700;
-const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT;
+const DEFAULT_HEIGHT = 720;
+const DEFAULT_WIDTH = Math.round(ratio * DEFAULT_HEIGHT);
 let gameOptions = {
     // start vertical point of the terrain, 0 = very top; 1 = very bottom
     startTerrainHeight: 0.5,
