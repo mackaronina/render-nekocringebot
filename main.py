@@ -616,11 +616,13 @@ def get_game():
 @app.route('/game/update_score', methods=['POST'])
 def game_update_score():
     content = request.get_json()
-    bot.send_message(ME_CHATID, str(content))
     user_id = content['user_id']
     score = content['score']
     message_id = content['message_id']
-    bot.set_game_score(user_id=user_id, score=score, inline_message_id=message_id)
+    try:
+        bot.set_game_score(user_id=user_id, score=score, inline_message_id=message_id)
+    except:
+        pass
     return '!', 200
 
 @app.route('/static/&lt;path:path&gt;')
