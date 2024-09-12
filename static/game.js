@@ -450,6 +450,7 @@ class playGame extends Phaser.Scene {
     // method to accelerate
     accelerate() {
         this.scale.startFullscreen();
+        this.scale.lockOrientation('landscape');
         this.acceleration = gameOptions.carAcceleration[0]
     }
 
