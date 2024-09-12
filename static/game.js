@@ -174,10 +174,8 @@ class playGame extends Phaser.Scene {
                     this.sndMonodori.stop();
                     this.sndDeath.play();
                     this.dead = true;
-                    this.time.delayedCall(4000, () => {
-                        upd_score(this.score);
-                        this.scene.restart()
-                    });
+                    upd_score(this.score);
+                    this.time.delayedCall(4000, () => { this.scene.restart() });
                 }
             } else if ((bodyA.label == "car" && bodyB.label == "coin") || (bodyB.label == "car" && bodyA.label == "coin") ||
                 (bodyA.label == "wheel" && bodyB.label == "coin") || (bodyB.label == "wheel" && bodyA.label == "coin")) {
