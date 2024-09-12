@@ -496,6 +496,7 @@ def callback_get(call):
     if call.game_short_name == 'nekoracing':
         url = f"https://nekocringebot.onrender.com/game?user_id={call.from_user.id}&message_id={call.inline_message_id}"
         bot.answer_callback_query(call.id, url=url)
+        return
     strkey = f'{call.message.chat.id} {call.message.message_id}'
     if strkey in blocked_messages or call.from_user.id in blocked_users:
         answer_callback_query(call,'Подожди заебал')
@@ -619,10 +620,7 @@ def game_update_score():
     user_id = content['user_id']
     score = content['score']
     message_id = content['message_id']
-    try:
-        bot.set_game_score(user_id=user_id, score=score, inline_message_id=message_id)
-    except:
-        pass
+    bot.set_game_score(user_id=user_id, score=score, inline_message_id=message_id)
     return '!', 200
 
 @app.route('/static/&lt;path:path&gt;')
