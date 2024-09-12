@@ -1,5 +1,8 @@
+screen.orientation.lock('landscape')
+    .then(() => console.log('locked'))
+    .catch(() => console.log('fail'));
 let game;
-const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth)
+const ratio = Math.max(window.screen.width / window.screen.height, window.screen.height / window.screen.width)
 const DEFAULT_HEIGHT = 600
 const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT
 let gameOptions = {
@@ -44,9 +47,6 @@ function loadFont(name, url) {
 }
 
 window.onload = function() {
-    screen.orientation.lock('landscape')
-        .then(() => console.log('locked'))
-        .catch(() => console.log('fail'));
     let gameConfig = {
         type: Phaser.AUTO,
         scale: {
@@ -54,7 +54,8 @@ window.onload = function() {
             autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
             width: DEFAULT_WIDTH,
-            height: DEFAULT_HEIGHT
+            height: DEFAULT_HEIGHT,
+            orientation: 'landscape'
         },
         physics: {
             default: "matter",
@@ -448,6 +449,7 @@ class playGame extends Phaser.Scene {
 
     // method to accelerate
     accelerate() {
+        this.scale.startFullscreen();
         this.acceleration = gameOptions.carAcceleration[0]
     }
 
