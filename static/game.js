@@ -1,6 +1,6 @@
 let game;
 const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
-const DEFAULT_HEIGHT = 600;
+const DEFAULT_HEIGHT = 500;
 const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT;
 let gameOptions = {
     // start vertical point of the terrain, 0 = very top; 1 = very bottom
@@ -291,9 +291,9 @@ class playGame extends Phaser.Scene {
             this.coindist += 1;
             if (this.coindist >= 20) {
                 this.coindist = 0;
-                let coin = this.matter.add.sprite(center.x + mountainStart.x, center.y - 90, 'coin');
-                coin.setDisplaySize(80, 80);
-                coin.setCircle(40, {
+                let coin = this.matter.add.sprite(center.x + mountainStart.x, center.y - 70, 'coin');
+                coin.setDisplaySize(60, 60);
+                coin.setCircle(30, {
                     label: 'coin',
                     isStatic: true,
                     friction: 1,
