@@ -1,6 +1,6 @@
 let game;
 const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
-const DEFAULT_HEIGHT = 650;
+const DEFAULT_HEIGHT = 600;
 const DEFAULT_WIDTH = Math.round(ratio * DEFAULT_HEIGHT);
 let gameOptions = {
     // start vertical point of the terrain, 0 = very top; 1 = very bottom
@@ -20,7 +20,7 @@ let gameOptions = {
     // mountain colors
     mountainColors: [0x853c35, 0x763530],
     // line width for each mountain color, in pixels
-    mountainColorsLineWidth: [0, 200]
+    mountainColorsLineWidth: [0, 100]
 }
 
 async function upd_score(coins) {
