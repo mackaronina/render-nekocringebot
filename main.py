@@ -1,6 +1,6 @@
 import telebot
 from telebot import types, apihelper
-from flask import Flask, request, send_file, jsonify, render_template, url_for
+from flask import Flask, request, send_file, jsonify, render_template, url_for, send_from_directory
 from petpetgif.saveGif import save_transparent_gif
 from io import BytesIO, StringIO
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -493,6 +493,9 @@ def callback_process(call):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_get(call):
+    if call.game_short_name == 'nekoracing':
+        url = f"https://nekocringebot.onrender.com/game?user_id={call.from_user.id}&message_id={call.inline_message_id}"
+        bot.answer_callback_query(call.id, url=url)
     strkey = f'{call.message.chat.id} {call.message.message_id}'
     if strkey in blocked_messages or call.from_user.id in blocked_users:
         answer_callback_query(call,'Подожди заебал')
@@ -604,6 +607,26 @@ def clicker_top():
                 i += 1
         res += "</table>"
         return render_template("top.html", top=res)
+
+@app.route('/game')
+def get_game():
+    return render_template("game.html")
+
+@app.route('/game/update_score', methods=['POST'])
+def game_update_score():
+    content = request.get_json()
+    user_id = content['user_id']
+    score = content['score']
+    message_id = content['message_id']
+    try:
+        bot.set_game_score(user_id=user_id, score=score, inline_message_id=message_id)
+    except:
+        pass
+    return '!', 200
+
+@app.route('/static/&lt;path:path&gt;')
+def send_static(path):
+    return send_from_directory('static', path)
 
 def updater():
     print('Поток запущен')
