@@ -1,3 +1,4 @@
+while (window.innerWidth < window.innerHeight) {}
 let game;
 const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
 const DEFAULT_HEIGHT = 600;
