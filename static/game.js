@@ -1,7 +1,7 @@
 let game;
-const ratio = Math.max(window.innerWidth / window.innerHeight, window.innerHeight / window.innerWidth);
-let DEFAULT_HEIGHT = 600;
-let DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT;
+const ratio = Math.max(window.screen.width / window.screen.height, window.screen.height / window.screen.width);
+const DEFAULT_HEIGHT = 600;
+const DEFAULT_WIDTH = ratio * DEFAULT_HEIGHT;
 let gameOptions = {
     // start vertical point of the terrain, 0 = very top; 1 = very bottom
     startTerrainHeight: 0.5,
@@ -47,7 +47,7 @@ window.onload = function() {
     let gameConfig = {
         type: Phaser.AUTO,
         scale: {
-            mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
+            mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
             width: DEFAULT_WIDTH,
