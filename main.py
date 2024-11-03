@@ -83,7 +83,7 @@ SERVICE_CHATID = -1002171923232
 NEKOSLAVIA_CHATID = -1001268892138
 ME_CHATID = 7258570440
 BOT_ID = 6990957141
-TIMESTAMP = 3*3600
+TIMESTAMP = 2*3600
 
 APP_URL = f'https://nekocringebot.onrender.com/{token}'
 app = Flask(__name__)
@@ -695,8 +695,8 @@ def jobweek():
 
 if __name__ == '__main__':
     random.seed()
-    schedule.every().day.at("21:01").do(jobweek)
-    schedule.every().day.at("05:01").do(jobday)
+    schedule.every().day.at("22:01").do(jobweek)
+    schedule.every().day.at("06:01").do(jobday)
     schedule.every(60).minutes.do(jobhour)
     Thread(target=updater).start()
     bot.send_message(ME_CHATID, 'Запущено')
