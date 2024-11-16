@@ -519,7 +519,7 @@ def msg_reaction(event):
         bot.delete_message(chat_id=event.chat.id, message_id=event.message_id)
         chel = html.escape(event.user.full_name, quote = True)
         idk = event.user.id
-        words = ['пиздатое', 'потужное', 'волшебное', 'ебанутое', 'некославное', 'кринжовое', 'базированное']
+        words = ['пиздатое', 'потужное', 'волшебное', 'ебанутое', 'некославное', 'кринжовое', 'базированное', '[ДАННЫЕ УДАЛЕНЫ]']
         bot.send_message(event.chat.id, f'Сегодня с <a href="tg://user?id={idk}">{chel}</a> произойдёт нечто <i>{random.choice(words)}</i> ✨💅')
 
 @app.route('/' + token, methods=['POST'])
