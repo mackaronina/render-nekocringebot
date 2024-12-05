@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style type="text/css">
+    @font-face {
+        font-family: "Pixel Cyr";
+        font-weight: normal;
+        font-style: normal;
+        src: url("static/PixelCyrNormal.ttf");
+    }
+
+    body {
+        background: #000000;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    #pleaserotate-graphic {
+        fill: #ffffff;
+    }
+
+    #pleaserotate-backdrop {
+        color: #ffffff;
+        background-color: #222222;
+    }
+
+    #pleaserotate-message {
+        font-family: "Pixel Cyr", normal;
+    }
+    </style>
+    <script>
+    /* you can pass in options here */
+    PleaseRotateOptions = {
+        message: "ПОВЕРНИ ТЕЛЕФОН БЛЯТЬ",
+        subMessage: "",
+        forcePortrait: false,
+        allowClickBypass: false
+    };
+    </script>
+    <script src="static/pleaserotate.min.js"></script>
+    <script src="static/phaser.min.js"></script>
+    <script src="static/simplify.js"></script>
+    <script src="static/game.js"></script>
+</head>
+
+<body>
+    <div id="thegame"></div>
+</body>
+
+</html>

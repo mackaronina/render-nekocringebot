@@ -1,0 +1,13 @@
+beautifulsoup4==4.12.2
+Flask==2.3.2
+Pillow==9.5.0
+pet-pet-gif==1.0.2
+pyTelegramBotAPI==4.22.0
+schedule==1.2.1
+lxml==4.9.3
+Telethon==1.36.0
+curl-cffi==0.7.1
+SQLAlchemy==1.4.48
+psycopg2==2.9.9
+PyMySQL==1.1.0
+groq==0.9.0
