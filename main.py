@@ -765,8 +765,9 @@ async def fetch_all():
                     if item["oldPrice"] is None:
                         continue
                     discount = round(float(item["oldPrice"] - item["price"]) / item["oldPrice"] * 100)
-                    regex = re.compile('[^a-zA-Z]')
-                    title = regex.sub('', item["title"])
+                    words = re.findall(r'\b[А-ЯA-Z]\w*\b', item["title"])
+                    words.pop(0)
+                    title = ' '.join(words)
                     href = f"https://silpo.ua/product/{item['slug']}"
                     result.append(
                         {
