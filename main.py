@@ -3,12 +3,12 @@ import html
 import json
 import os
 import random
+import re
 import textwrap
 import time
 import traceback
 from datetime import datetime
 from io import BytesIO, StringIO
-from re import search
 from threading import Thread
 
 import schedule
@@ -479,20 +479,20 @@ def handle_text(message, txt):
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU1krYllZmDsM70Wflt5oZ3-_DwKdAACqBoAAqgrQUv0qGwOc3lWNi8E')
     elif low == 'кринж':
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEJqU9krYl2-rfaY7UQB_35FDwm1FBL9wACvxoAAuorQEtk0hzsZpp1hi8E')
-    elif search(r'\bдавид', low):
+    elif re.search(r'\bдавид', low):
         bot.send_message(message.chat.id, 'Давид шедевр', reply_to_message_id=message.message_id)
     elif 'негр' in low or 'нигер' in low:
         set_reaction(message.chat.id, message.id, "💅")
-    elif search(r'\bсбу\b', low):
+    elif re.search(r'\bсбу\b', low):
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEKWrBlDPH3Ok1hxuoEndURzstMhckAAWYAAm8sAAIZOLlLPx0MDd1u460wBA',
                          reply_to_message_id=message.message_id)
-    elif search(r'\bпоро[хш]', low) or search(r'\bрошен', low) or search(r'\bгетьман', low):
+    elif re.search(r'\bпоро[хш]', low) or re.search(r'\bрошен', low) or re.search(r'\bгетьман', low):
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEK-splffs7OZYtr8wzINEw4lxbvwywoAACXSoAAg2JiEoB98dw3NQ3FjME',
                          reply_to_message_id=message.message_id)
-    elif search(r'\bзеленс', low):
+    elif re.search(r'\bзеленс', low):
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELGOplmDc9SkF-ZnVsdNl4vhvzZEo7BQAC5SwAAkrDgEr_AVwN_RkClDQE',
                          reply_to_message_id=message.message_id)
-    elif search(r'\bнеко.?арк', low) or search(r'\bneco.?arc', low):
+    elif re.search(r'\bнеко.?арк', low) or re.search(r'\bneco.?arc', low):
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAELHUtlm1wm-0Fc-Ny2na6ogFAuHLC-DgAChisAAgyUiEose7WRTmRWsjQE',
                          reply_to_message_id=message.message_id)
 
@@ -736,7 +736,9 @@ def jobday():
     text = "Обнаружены монстры по скидке:"
     for item in silpo_data:
         text += f'''\n<a href="{item['href']}">{item['title']}</a>  -{item['discount']}%'''
-    bot.send_message(NEKOSLAVIA_CHATID, text)
+    regex = re.compile('[^a-zA-Z]')
+    text = regex.sub('', text)
+    bot.send_message(NEKOSLAVIA_CHATID, text, disable_web_page_preview=True)
 
 
 def jobhour():
