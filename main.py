@@ -312,8 +312,6 @@ def msg_test(message):
     text = "Обнаружены монстры по скидке:"
     for item in silpo_data:
         text += f'''\n<a href="{item['href']}">{item['title']}</a>  -{item['discount']}%'''
-    regex = re.compile('[^a-zA-Z]')
-    text = regex.sub('', text)
     bot.send_message(NEKOSLAVIA_CHATID, text, disable_web_page_preview=True)
 
 
@@ -738,8 +736,6 @@ def jobday():
     text = "Обнаружены монстры по скидке:"
     for item in silpo_data:
         text += f'''\n<a href="{item['href']}">{item['title']}</a>  -{item['discount']}%'''
-    regex = re.compile('[^a-zA-Z]')
-    text = regex.sub('', text)
     bot.send_message(NEKOSLAVIA_CHATID, text, disable_web_page_preview=True)
 
 
@@ -769,7 +765,8 @@ async def fetch_all():
                     if item["oldPrice"] is None:
                         continue
                     discount = round(float(item["oldPrice"] - item["price"]) / item["oldPrice"] * 100)
-                    title = item["title"]
+                    regex = re.compile('[^a-zA-Z]')
+                    title = regex.sub('', item["title"])
                     href = f"https://silpo.ua/product/{item['slug']}"
                     result.append(
                         {
