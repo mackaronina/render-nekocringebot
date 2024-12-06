@@ -303,18 +303,6 @@ def msg_monster(message):
     bot.send_photo(message.chat.id, photo=item[1], caption=item[0], reply_to_message_id=message.message_id)
 
 
-@bot.message_handler(commands=["test"])
-def msg_test(message):
-    silpo_data = asyncio.run(fetch_all())
-    if len(silpo_data) == 0:
-        return
-    silpo_data = sorted(silpo_data, key=lambda item: item["discount"], reverse=True)
-    text = "Обнаружены монстры по скидке:"
-    for item in silpo_data:
-        text += f'''\n<a href="{item['href']}">{item['title']}</a>  -{item['discount']}%'''
-    bot.send_message(NEKOSLAVIA_CHATID, text, disable_web_page_preview=True)
-
-
 @bot.message_handler(commands=["del"])
 def msg_del(message):
     bot.delete_message(chat_id=message.chat.id, message_id=message.reply_to_message.id)
@@ -733,7 +721,7 @@ def jobday():
     if len(silpo_data) == 0:
         return
     silpo_data = sorted(silpo_data, key=lambda item: item["discount"], reverse=True)
-    text = "Обнаружены монстры по скидке:"
+    text = "Начни свой день с монстра по скидке в сильпо:"
     for item in silpo_data:
         text += f'''\n<a href="{item['href']}">{item['title']}</a>  -{item['discount']}%'''
     bot.send_message(NEKOSLAVIA_CHATID, text, disable_web_page_preview=True)
