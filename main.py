@@ -312,7 +312,9 @@ def msg_test(message):
     text = "Обнаружены монстры по скидке:"
     for item in silpo_data:
         text += f'''\n<a href="{item['href']}">{item['title']}</a>  -{item['discount']}%'''
-    bot.send_message(NEKOSLAVIA_CHATID, text)
+    regex = re.compile('[^a-zA-Z]')
+    text = regex.sub('', text)
+    bot.send_message(NEKOSLAVIA_CHATID, text, disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=["del"])
