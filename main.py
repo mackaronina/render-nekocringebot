@@ -411,6 +411,7 @@ def msg_paint(message):
 def msg_test(message):
     link = generate_telegraph_link()
     if link is None:
+        bot.send_message(ME_CHATID, 'Link is None')
         return
     text = "<b>Начни свой день с монстра по скидке</b>"
     keyboard = types.InlineKeyboardMarkup(row_width=1)
@@ -778,7 +779,8 @@ def fetch_silpo():
                         }
                     )
                 return result
-            except:
+            except Exception as e:
+                bot.send_message(ME_CHATID, 'SILPO ' + str(e))
                 time.sleep(3)
         return []
 
@@ -805,7 +807,8 @@ def generate_telegraph_link():
         try:
             response = telegraph.create_page('Акції', html_content=text)
             return response['url']
-        except:
+        except Exception as e:
+            bot.send_message(ME_CHATID, 'GENERATE ' + str(e))
             time.sleep(3)
 
 
@@ -840,7 +843,8 @@ def fetch_atb():
                         }
                     )
                 return result
-            except:
+            except Exception as e:
+                bot.send_message(ME_CHATID, 'ATB ' + str(e))
                 time.sleep(3)
         return []
 
