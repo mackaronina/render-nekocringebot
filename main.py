@@ -779,8 +779,7 @@ def fetch_silpo():
                         }
                     )
                 return result
-            except Exception as e:
-                bot.send_message(ME_CHATID, 'SILPO ' + str(e))
+            except:
                 time.sleep(3)
         return []
 
@@ -803,6 +802,7 @@ def generate_telegraph_link():
             text += f'''\n<a href="{item['href']}">{item['title']}</a>   {item['price']} грн   -{item['discount']}%<br>'''
     text += '</p>'
     telegraph = Telegraph()
+    telegraph.create_account(short_name='nekocringebot')
     for attempts in range(3):
         try:
             response = telegraph.create_page('Акції', html_content=text)
@@ -843,8 +843,7 @@ def fetch_atb():
                         }
                     )
                 return result
-            except Exception as e:
-                bot.send_message(ME_CHATID, 'ATB ' + str(e))
+            except:
                 time.sleep(3)
         return []
 
