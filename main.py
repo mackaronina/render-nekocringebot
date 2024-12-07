@@ -22,6 +22,7 @@ from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from sqlalchemy import create_engine
 from telebot import types, apihelper
+from telegraph import Telegraph
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
@@ -406,6 +407,18 @@ def msg_paint(message):
     bot.send_message(message.chat.id, 'Нажми на кнопку чтобы отправить свой уебанский рисунок', reply_markup=markup)
 
 
+@bot.message_handler(commands=["test"])
+def msg_test(message):
+    link = generate_telegraph_link()
+    if link is None:
+        return
+    text = "<b>Начни свой день с монстра по скидке</b>"
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    callback_button = types.InlineKeyboardButton(text='Список скидок', url=link)
+    keyboard.add(callback_button)
+    bot.send_message(SERVICE_CHATID, text, reply_markup=keyboard)
+
+
 @bot.message_handler(commands=["sex"])
 def msg_sex(message):
     k = random.randint(1, 2)
@@ -717,14 +730,14 @@ def jobday():
         client.download_media(m, bio)
         bio.seek(0)
         bot.send_voice(NEKOSLAVIA_CHATID, bio)
-    silpo_data = asyncio.run(fetch_all())
-    if len(silpo_data) == 0:
+    link = generate_telegraph_link()
+    if link is None:
         return
-    silpo_data = sorted(silpo_data, key=lambda item: item["discount"], reverse=True)
-    text = "<b>Начни свой день с монстра по скидке в сильпо:</b>"
-    for item in silpo_data:
-        text += f'''\n<a href="{item['href']}">{item['title']}</a> -{item['discount']}%'''
-    bot.send_message(NEKOSLAVIA_CHATID, text, disable_web_page_preview=True)
+    text = "<b>Начни свой день с монстра по скидке</b>"
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    callback_button = types.InlineKeyboardButton(text='Список скидок', url=link)
+    keyboard.add(callback_button)
+    bot.send_message(NEKOSLAVIA_CHATID, text, reply_markup=keyboard)
 
 
 def jobhour():
@@ -740,14 +753,13 @@ def jobnight():
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEKXtllDtEnW5DZM-V3VQpFEnzKY0CTOgACsD0AAhGtWEjUrpGNhMRheDAE')
 
 
-async def fetch_all():
-    async with requests.AsyncSession() as session:
-        attempts = 0
-        while True:
+def fetch_silpo():
+    with requests.Session() as session:
+        for attempts in range(3):
             try:
                 result = []
                 link = "https://sf-ecom-api.silpo.ua/v1/uk/branches/00000000-0000-0000-0000-000000000000/products?limit=47&offset=0&deliveryType=DeliveryHome&includeChildCategories=true&sortBy=productsList&sortDirection=desc&inStock=true&search=monster%20energ"
-                resp = await session.get(link, impersonate="chrome110")
+                resp = session.get(link, impersonate="chrome110")
                 data = resp.json()
                 for item in data["items"]:
                     if item["oldPrice"] is None:
@@ -762,14 +774,75 @@ async def fetch_all():
                             "title": title,
                             "href": href,
                             "discount": discount,
+                            "price": item["price"]
                         }
                     )
                 return result
             except:
-                if attempts >= 3:
-                    raise
-                attempts += 1
-                await asyncio.sleep(3)
+                time.sleep(3)
+        return []
+
+
+def generate_telegraph_link():
+    silpo_data = fetch_silpo()
+    atb_data = fetch_atb()
+    if len(silpo_data) == 0 and len(atb_data) == 0:
+        return None
+    text = '<p>'
+    if len(silpo_data) != 0:
+        text += '<h4>Сільпо</h4>'
+        silpo_data = sorted(silpo_data, key=lambda item: item["discount"], reverse=True)
+        for item in silpo_data:
+            text += f'''\n<a href="{item['href']}">{item['title']}</a>   {item['price']} грн   -{item['discount']}%<br>'''
+    if len(atb_data) != 0:
+        text += '<h4>АТБ</h4>'
+        atb_data = sorted(atb_data, key=lambda item: item["discount"], reverse=True)
+        for item in atb_data:
+            text += f'''\n<a href="{item['href']}">{item['title']}</a>   {item['price']} грн   -{item['discount']}%<br>'''
+    text += '</p>'
+    telegraph = Telegraph()
+    for attempts in range(3):
+        try:
+            response = telegraph.create_page('Акції', html_content=text)
+            return response['url']
+        except:
+            time.sleep(3)
+
+
+def fetch_atb():
+    with requests.Session() as session:
+        for attempts in range(3):
+            try:
+                result = []
+                link = "https://www.atbmarket.com/sch?page=1&lang=uk&query=напій%20monster"
+                resp = session.get(link, impersonate="chrome110")
+                soup = BeautifulSoup(resp.text, 'lxml')
+                items = soup.find_all('article', class_='catalog-item')
+                for item in items:
+                    if item.find('data', class_='product-price__bottom') is None:
+                        continue
+                    old_price = float(item.find('data', class_='product-price__bottom')['value'])
+                    new_price = float(item.find('data', class_='product-price__top')['value'])
+                    print(old_price)
+                    print(new_price)
+                    words = re.findall(r'\b[А-ЯA-Z]\w*\b',
+                                       item.find('div', class_='catalog-item__title').find('a').text)
+                    words.pop(0)
+                    title = ' '.join(words)
+                    href = f"https://www.atbmarket.com{item.find('div', class_='catalog-item__title').find('a')['href']}"
+                    discount = round((old_price - new_price) / old_price * 100)
+                    result.append(
+                        {
+                            "title": title,
+                            "href": href,
+                            "discount": discount,
+                            "price": new_price
+                        }
+                    )
+                return result
+            except:
+                time.sleep(3)
+        return []
 
 
 def jobweek():

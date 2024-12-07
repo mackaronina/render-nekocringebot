@@ -7,6 +7,7 @@
     <list default="true" id="10c6a48e-40d8-41ff-bdb6-ff0214d0397a" name="Changes" comment="Some commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +135,8 @@
       <workItem from="1733444410928" duration="2057000" />
       <workItem from="1733447168702" duration="77000" />
       <workItem from="1733479291775" duration="22000" />
-      <workItem from="1733480591093" duration="23000" />
+      <workItem from="1733480591093" duration="61000" />
+      <workItem from="1733605861824" duration="5748000" />
     </task>
     <task id="LOCAL-00001" summary="Commit from ide">
       <option name="closed" value="true" />
@@ -200,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733447234978</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Some commit">
+      <option name="closed" value="true" />
+      <created>1733480635592</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1733480635592</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
