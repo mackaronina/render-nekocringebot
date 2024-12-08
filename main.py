@@ -407,19 +407,6 @@ def msg_paint(message):
     bot.send_message(message.chat.id, 'Нажми на кнопку чтобы отправить свой уебанский рисунок', reply_markup=markup)
 
 
-@bot.message_handler(commands=["test"])
-def msg_test(message):
-    link = generate_telegraph_link()
-    if link is None:
-        bot.send_message(ME_CHATID, 'Link is None')
-        return
-    text = "<b>Начни свой день с монстра по скидке</b>"
-    keyboard = types.InlineKeyboardMarkup(row_width=1)
-    callback_button = types.InlineKeyboardButton(text='Список скидок', url=link)
-    keyboard.add(callback_button)
-    bot.send_message(SERVICE_CHATID, text, reply_markup=keyboard)
-
-
 @bot.message_handler(commands=["sex"])
 def msg_sex(message):
     k = random.randint(1, 2)
@@ -791,12 +778,12 @@ def generate_telegraph_link():
         return None
     text = '<p>'
     if len(silpo_data) != 0:
-        text += '<h4>Сильпо</h4><br>'
+        text += '<h4>Сильпо</h4>'
         silpo_data = sorted(silpo_data, key=lambda item: item["discount"], reverse=True)
         for item in silpo_data:
             text += f'''<a href="{item['href']}">{item['title']}</a> {item['price']} грн -{item['discount']}%<br>'''
     if len(atb_data) != 0:
-        text += '<h4>АТБ</h4><br>'
+        text += '<h4>АТБ</h4>'
         atb_data = sorted(atb_data, key=lambda item: item["discount"], reverse=True)
         for item in atb_data:
             text += f'''<a href="{item['href']}">{item['title']}</a> {item['price']} грн -{item['discount']}%<br>'''
