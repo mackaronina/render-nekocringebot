@@ -791,24 +791,23 @@ def generate_telegraph_link():
         return None
     text = '<p>'
     if len(silpo_data) != 0:
-        text += '<h4>Сільпо</h4>'
+        text += '<h4>Сильпо</h4><br>'
         silpo_data = sorted(silpo_data, key=lambda item: item["discount"], reverse=True)
         for item in silpo_data:
-            text += f'''\n<a href="{item['href']}">{item['title']}</a>   {item['price']} грн   -{item['discount']}%<br>'''
+            text += f'''<a href="{item['href']}">{item['title']}</a> {item['price']} грн -{item['discount']}%<br>'''
     if len(atb_data) != 0:
-        text += '<h4>АТБ</h4>'
+        text += '<h4>АТБ</h4><br>'
         atb_data = sorted(atb_data, key=lambda item: item["discount"], reverse=True)
         for item in atb_data:
-            text += f'''\n<a href="{item['href']}">{item['title']}</a>   {item['price']} грн   -{item['discount']}%<br>'''
+            text += f'''<a href="{item['href']}">{item['title']}</a> {item['price']} грн -{item['discount']}%<br>'''
     text += '</p>'
     telegraph = Telegraph()
     telegraph.create_account(short_name='nekocringebot')
     for attempts in range(3):
         try:
-            response = telegraph.create_page('Акції', html_content=text)
+            response = telegraph.create_page('Список скидок', html_content=text)
             return response['url']
-        except Exception as e:
-            bot.send_message(ME_CHATID, 'GENERATE ' + str(e))
+        except:
             time.sleep(3)
 
 
