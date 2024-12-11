@@ -315,12 +315,16 @@ def msg_pet(message):
     if message.reply_to_message is None:
         bot.send_message(message.chat.id, 'Ответом на сообщение еблан', reply_to_message_id=message.message_id)
         return
-    r = bot.get_user_profile_photos(message.reply_to_message.from_user.id)
-    if len(r.photos) == 0:
-        bot.send_message(message.chat.id, 'У этого пидора нет авы', reply_to_message_id=message.message_id)
-        return
-    fid = r.photos[0][-1].file_id
-    img = get_pil(fid)
+    if message.reply_to_message.photo is None:
+        r = bot.get_user_profile_photos(message.reply_to_message.from_user.id)
+        if len(r.photos) == 0:
+            bot.send_message(message.chat.id, 'У этого пидора нет авы', reply_to_message_id=message.message_id)
+            return
+        fid = r.photos[0][-1].file_id
+        img = get_pil(fid)
+    else:
+        img = get_pil(message.reply_to_message.photo[-1].file_id)
+        img = img.resize((500, 500), Image.ANTIALIAS)
     mean = dominant_color(img)
     f = make(img, mean)
     bot.send_animation(message.chat.id, f, reply_to_message_id=message.reply_to_message.message_id)
@@ -358,16 +362,17 @@ def msg_cube(message):
     if message.reply_to_message is None:
         bot.send_message(message.chat.id, 'Ответом на сообщение еблан', reply_to_message_id=message.message_id)
         return
-    r = bot.get_user_profile_photos(message.reply_to_message.from_user.id)
-    if len(r.photos) == 0:
-        bot.send_message(message.chat.id, 'У этого пидора нет авы', reply_to_message_id=message.message_id)
-        return
-    fid = r.photos[0][-1].file_id
-    file_info = bot.get_file(fid)
-    downloaded_file = bot.download_file(file_info.file_path)
-    bio = BytesIO(downloaded_file)
-    bio.name = 'result.png'
-    bio.seek(0)
+    if message.reply_to_message.photo is None:
+        r = bot.get_user_profile_photos(message.reply_to_message.from_user.id)
+        if len(r.photos) == 0:
+            bot.send_message(message.chat.id, 'У этого пидора нет авы', reply_to_message_id=message.message_id)
+            return
+        fid = r.photos[0][-1].file_id
+        img = get_pil(fid)
+    else:
+        img = get_pil(message.reply_to_message.photo[-1].file_id)
+        img = img.resize((500, 500), Image.ANTIALIAS)
+    bio = send_pil(img)
     direct = random.choice(['left', 'right'])
     dat = {
         "target": 1,
