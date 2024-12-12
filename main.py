@@ -751,7 +751,8 @@ def jobnews():
     )
     response = chat_completion.choices[0].message.content
     if '\n' in response:
-        text = f"<b>{response.split('\n')[0]}</b>\n\n{response.split('\n')[1]}"
+        mas = response.split('\n')
+        text = f"<b>{mas[0]}</b>\n\n{mas[1]}"
     else:
         text = response
     bot.send_message(-1002426494412, text)
