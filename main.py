@@ -699,42 +699,6 @@ def updater():
 
 
 def jobday():
-    bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
-    chat_completion = neuro.chat.completions.create(
-        messages=[
-            {"role": "system",
-             "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины'},
-            {"role": "user",
-             "content": "Напиши короткое необычное пожелание доброго утра для жителей Некославии. Используй только кириллические буквы"}
-        ],
-        model="llama3-8b-8192"
-    )
-    response = chat_completion.choices[0].message.content
-    print(response)
-    if len(response) > 500:
-        response = response[:500]
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    with TelegramClient(StringSession(ses), api_id, api_hash, loop=loop) as client:
-        client.start()
-        m = client.send_message('@silero_voice_bot', response)
-        time.sleep(5)
-        m = client.get_messages('@silero_voice_bot', ids=m.id + 1)
-        bio = BytesIO()
-        client.download_media(m, bio)
-        bio.seek(0)
-        bot.send_voice(NEKOSLAVIA_CHATID, bio)
-    link = generate_telegraph_link()
-    if link is None:
-        return
-    text = "<b>Начни свой день с монстра по скидке</b>"
-    keyboard = types.InlineKeyboardMarkup(row_width=1)
-    callback_button = types.InlineKeyboardButton(text='Список скидок', url=link)
-    keyboard.add(callback_button)
-    bot.send_message(NEKOSLAVIA_CHATID, text, reply_markup=keyboard)
-
-
-def jobday():
     # доброе утро некославы
     bot.send_sticker(NEKOSLAVIA_CHATID, 'CAACAgIAAxkBAAEE3Nhikp10A0x2mXRExbnjP1Rm3m4jvAACpxAAAntFWEgwuu0ea7AOsSQE')
     chat_completion = neuro.chat.completions.create(
@@ -778,7 +742,7 @@ def jobday():
             {"role": "system",
              "content": 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины. Ты администратор новостного канала "Некославач" в телеграмме. Твоя работа состоит в том чтобы писать выдуманные новости про Некославию в этот канал. Твой ответ не должен содержать ничего кроме текста новости без даты.'},
             {"role": "user",
-             "content": f'Напиши новость на тему "{random.choice(news)}". Учти что сегодня {datetime.now().strftime('%d.%m.%Y')}'}
+             "content": f'Напиши новость на тему "{random.choice(news)}". Учти что сегодня {datetime.now().strftime("%d.%m.%Y")}'}
         ],
         model="llama-3.3-70b-versatile"
     )
