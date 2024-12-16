@@ -758,14 +758,15 @@ def jobnews(channel=-1002426494412):
         model="llama-3.3-70b-versatile"
     )
     response = chat_completion.choices[0].message.content
+    new = new.replace(' ', '_').replace('-', '_')
     if '\n' in response:
         mas = response.split('\n')
         title = mas[0]
         del mas[0]
         text = ''.join(mas)
-        text = f"<b>{title}</b>\n\n{text}\n\n#{new.replace(' ', '_')}"
+        text = f"<b>{title}</b>\n\n{text}\n\n#{new}"
     else:
-        text = f"{response}\n\n#{new.replace(' ', '_')}"
+        text = f"{response}\n\n#{new}"
     bot.send_message(channel, text)
 
 
