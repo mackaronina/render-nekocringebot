@@ -310,6 +310,11 @@ def msg_del(message):
     bot.delete_message(chat_id=message.chat.id, message_id=message.id)
 
 
+@bot.message_handler(commands=["abobus"])
+def msg_abobus(message):
+    jobnews()
+
+
 @bot.message_handler(commands=["pet"])
 def msg_pet(message):
     if message.reply_to_message is None:
@@ -752,7 +757,10 @@ def jobnews():
     response = chat_completion.choices[0].message.content
     if '\n' in response:
         mas = response.split('\n')
-        text = f"<b>{mas[0]}</b>\n\n{mas[1]}"
+        title = mas[0]
+        del mas[0]
+        text = ''.join(mas)
+        text = f"<b>{title}</b>\n\n{text}"
     else:
         text = response
     bot.send_message(-1002426494412, text)
