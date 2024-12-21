@@ -763,9 +763,9 @@ def jobnews(channel=-1002426494412):
     new = new.replace(' ', '_').replace('-', '_')
     if '\n' in response:
         mas = response.split('\n')
-        title = mas[0]
+        title = mas[0].strip()
         del mas[0]
-        text = ''.join(mas)
+        text = ' '.join(mas).strip()
         text = f"⚡️<b>{title}</b>⚡️\n\n{text}\n\n#{new}"
     else:
         text = f"{response}\n\n#{new}"
