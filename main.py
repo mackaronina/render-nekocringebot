@@ -911,29 +911,25 @@ def jobweek():
     bot.send_sticker(NEKOSLAVIA_CHATID, stickers[datetime.weekday(cur)])
 
 
-def get_config_value(key):
-    data = cursor.execute(f"SELECT value FROM key_value WHERE key = '{key}'").fetchone()
-    if data is None:
-        return None
-    else:
-        return data[0]
+def send_map_to_bot():
+    time.sleep(3 * 60)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    with TelegramClient(StringSession(ses), api_id, api_hash, loop=loop) as client:
+        client.start()
+        client.send_message('@urkpixelbot', '/map')
 
 
-def jobminute():
-    map_running = eval(get_config_value("MAP_RUNNING"))
-    if map_running:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        with TelegramClient(StringSession(ses), api_id, api_hash, loop=loop) as client:
-            client.start()
-            client.send_message('@urkpixelbot', '/map')
+@app.route('/send_map', methods=['POST'])
+def send_map():
+    Thread(target=send_map_to_bot).start()
+    return 'ok', 200
 
 
 if __name__ == '__main__':
     random.seed()
     schedule.every().day.at("22:01").do(jobweek)
     schedule.every().day.at("06:01").do(jobday)
-    schedule.every(3).minutes.do(jobminute)
     schedule.every(60).minutes.do(jobhour)
     schedule.every(12).hours.do(jobnews)
     Thread(target=updater).start()
