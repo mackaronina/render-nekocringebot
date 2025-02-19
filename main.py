@@ -911,18 +911,14 @@ def jobweek():
     bot.send_sticker(NEKOSLAVIA_CHATID, stickers[datetime.weekday(cur)])
 
 
-def send_map_to_bot():
+@app.route('/send_map', methods=['POST'])
+def send_map():
     time.sleep(3 * 60)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     with TelegramClient(StringSession(ses), api_id, api_hash, loop=loop) as client:
         client.start()
         client.send_message('@urkpixelbot', '/map')
-
-
-@app.route('/send_map', methods=['POST'])
-def send_map():
-    Thread(target=send_map_to_bot).start()
     return 'ok', 200
 
 
