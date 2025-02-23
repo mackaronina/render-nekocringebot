@@ -913,7 +913,7 @@ def jobweek():
 
 @app.route('/send_map', methods=['POST'])
 def send_map():
-    time.sleep(3 * 60)
+    time.sleep(60)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     with TelegramClient(StringSession(ses), api_id, api_hash, loop=loop) as client:
