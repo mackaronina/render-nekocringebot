@@ -933,15 +933,17 @@ async def jobcheckcall():
             users = await calls.get_participants(-1002178936745)
             if users is None or len(users) == 0:
                 return
+            final_list = []
             for user in users:
                 user_info = await client.get_entity(user.user_id)
                 if type(user_info) is Channel:
-                    user.name = user_info.title
+                    final_list.append({"name": user_info.title})
                 else:
-                    user.first_name = user_info.first_name
-                    user.last_name = user_info.last_name
-                    user.username = user_info.username
-            bio = BytesIO(bytes(str(users), 'utf-8'))
+                    final_list.append({"first_name": user_info.first_name,
+                                       "last_name": user_info.last_name,
+                                       "username": user_info.username,
+                                       "user_id": user.user_id})
+            bio = BytesIO(bytes(str(final_list), 'utf-8'))
             bio.name = 'log.txt'
             bio.seek(0)
             await client.send_file('@smallbeepm', bio)
