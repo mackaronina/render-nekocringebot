@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10c6a48e-40d8-41ff-bdb6-ff0214d0397a" name="Changes" comment="Some commit" />
+    <list default="true" id="10c6a48e-40d8-41ff-bdb6-ff0214d0397a" name="Changes" comment="Some commit">
+      <change beforePath="$PROJECT_DIR$/.idea/render-nekocringebot-main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/render-nekocringebot-main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,6 +175,9 @@
       <workItem from="1739712035181" duration="911000" />
       <workItem from="1739735742674" duration="270000" />
       <workItem from="1739954089365" duration="246000" />
+      <workItem from="1740273978975" duration="29000" />
+      <workItem from="1740426578806" duration="4388000" />
+      <workItem from="1740433072171" duration="22000" />
     </task>
     <task id="LOCAL-00001" summary="Commit from ide">
       <option name="closed" value="true" />
@@ -476,7 +483,31 @@
       <option name="project" value="LOCAL" />
       <updated>1739954326776</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Some commit">
+      <option name="closed" value="true" />
+      <created>1740273995414</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1740273995414</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Some commit">
+      <option name="closed" value="true" />
+      <created>1740273999696</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1740273999696</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Some commit">
+      <option name="closed" value="true" />
+      <created>1740430644883</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1740430644883</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

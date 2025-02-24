@@ -931,6 +931,8 @@ async def jobcheckcall():
             calls = PyTgCalls(client)
             await calls.start()
             users = await calls.get_participants(-1002178936745)
+            if users is None or len(users) == 0:
+                return
             for user in users:
                 user_info = await client.get_entity(user.user_id)
                 if type(user_info) is Channel:
