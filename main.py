@@ -20,11 +20,13 @@ from flask import Flask, request, send_file, jsonify, render_template, send_from
 from groq import Groq
 from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
+from pytgcalls import PyTgCalls
 from sqlalchemy import create_engine
 from telebot import types, apihelper
 from telegraph import Telegraph
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
+from telethon.tl.types import Channel
 
 time.sleep(3)
 
@@ -922,11 +924,35 @@ def send_map():
     return 'ok', 200
 
 
+async def jobcheckcall():
+    try:
+        async with TelegramClient(StringSession(ses), api_id, api_hash) as client:
+            client.start()
+            calls = PyTgCalls(client)
+            await calls.start()
+            users = await calls.get_participants(-1002178936745)
+            for user in users:
+                user_info = await client.get_entity(user.user_id)
+                if type(user_info) is Channel:
+                    user.name = user_info.title
+                else:
+                    user.first_name = user_info.first_name
+                    user.last_name = user_info.last_name
+                    user.username = user_info.username
+            bio = BytesIO(bytes(str(users), 'utf-8'))
+            bio.name = 'log.txt'
+            bio.seek(0)
+            await client.send_file('@smallbeepm', bio)
+    except Exception as e:
+        bot.send_message(ME_CHATID, str(e))
+
+
 if __name__ == '__main__':
     random.seed()
     schedule.every().day.at("22:01").do(jobweek)
     schedule.every().day.at("06:01").do(jobday)
     schedule.every(60).minutes.do(jobhour)
+    schedule.every(2).minutes.do(lambda: asyncio.run(jobcheckcall()))
     schedule.every(12).hours.do(jobnews)
     Thread(target=updater).start()
     bot.send_message(ME_CHATID, 'Запущено')
