@@ -935,9 +935,10 @@ async def jobcheckcall():
                 return
             final_list = []
             for user in users:
+                user_id = user.user_id
                 if user_id == 4724473514:
                     user_id = -1004724473514
-                user_info = await client.get_entity(user.user_id)
+                user_info = await client.get_entity(user_id)
                 if type(user_info) is Channel:
                     final_list.append({"name": user_info.title})
                 else:
