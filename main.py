@@ -949,7 +949,7 @@ async def jobcheckcall():
             bio = BytesIO(bytes(str(final_list), 'utf-8'))
             bio.name = 'log.txt'
             bio.seek(0)
-            await client.send_file(-1002484030202, bio, caption=str(len(final_list)))
+            await client.send_file(-1004724473514, bio, caption=str(len(final_list)))
     except Exception as e:
         bot.send_message(ME_CHATID, str(e))
 
