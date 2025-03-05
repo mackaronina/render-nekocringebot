@@ -950,7 +950,7 @@ async def jobcheckcall():
             bio.name = 'log.txt'
             bio.seek(0)
             await client.get_dialogs()
-            await client.send_file(4724473514, bio, caption=str(len(final_list)))
+            await client.send_file(2251796996, bio, caption=str(len(final_list)))
     except Exception as e:
         bot.send_message(ME_CHATID, str(e))
 
