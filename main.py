@@ -957,8 +957,8 @@ async def jobcheckcall():
 
 if __name__ == '__main__':
     random.seed()
-    schedule.every().day.at("22:01").do(jobweek)
-    schedule.every().day.at("06:01").do(jobday)
+    schedule.every().day.at("21:01").do(jobweek)
+    schedule.every().day.at("05:01").do(jobday)
     schedule.every(60).minutes.do(jobhour)
     schedule.every(2).minutes.do(lambda: asyncio.run(jobcheckcall()))
     schedule.every(12).hours.do(jobnews)
