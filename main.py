@@ -10,6 +10,7 @@ import traceback
 from datetime import datetime
 from io import BytesIO, StringIO
 from threading import Thread
+from typing import List
 
 import schedule
 import telebot
@@ -17,12 +18,13 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from bs4 import BeautifulSoup
 from curl_cffi import requests, CurlMime
 from flask import Flask, request, send_file, jsonify, render_template, send_from_directory
-from groq import Groq
+from groq import Groq, BaseModel
 from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from pytgcalls import PyTgCalls
 from sqlalchemy import create_engine
 from telebot import types, apihelper
+from telebot.types import InputPollOption
 from telegraph import Telegraph
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
@@ -169,6 +171,10 @@ monsters_db = {
     "Gesalzenes Karamell Espresso-Monster": "AgACAgIAAyEGAASBdOsgAAINCGbZrv5U9pJnrDRmATwAAYN4RtayrQACut0xG8WX0UqZILFz0SUyvQEAAwIAA3gAAzYE",
     "Java Monster Swiss Chocolate": "AgACAgIAAyEGAASBdOsgAAINIWbZr2M7vMhTmZHZLRe22T2byBdDAALI3TEbxZfRSmF4-VSNrFzgAQADAgADeAADNgQ"
 }
+
+
+def cur_date():
+    return datetime.fromtimestamp(time.time() + TIMESTAMP)
 
 
 def dominant_color(image):
@@ -742,44 +748,81 @@ def jobday():
         bot.send_message(NEKOSLAVIA_CHATID, text, reply_markup=keyboard)
 
 
+class New(BaseModel):
+    title: str
+    text: str
+
+
+class Poll(BaseModel):
+    question: str
+    options: List[str]
+
+
 def jobnews(channel=-1002426494412):
     # пост в канал
-    news = ['спорт', 'финансы', 'технологии', 'международные отношения', 'политика', 'общество', 'наука',
-            'красота и здоровье', 'шоу-бизнес', 'компьютерные игры', 'погода', 'мнения', 'астрология', 'туризм',
-            'военные действия', 'культура', 'фильмы и сериалы', 'интервью', 'историческая правда', 'проишествия',
-            'власть', 'образование', 'криминал', 'разоблачение', 'благотворительность', 'мода', 'ИТ-технологии',
-            'кибербезопасность', 'изменение климата', 'медицина', 'выборы', 'коррупция', 'развлечения',
-            'социальные сети', 'мистика', 'кулинария', 'история успеха', 'литература и книги', 'развенчивание мифов',
-            'архитектура и урбанистика', 'беженцы и мигранты', 'аниме']
-    new = random.choice(news)
-    lore = 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её девиз это "Славься Некославия!". Прорывом в генной инженерии стало скрещивание кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Самый популярный энергетик в Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины. Ты администратор новостного канала "Некославач" в телеграмме. Твоя работа состоит в том чтобы писать выдуманные новости про Некославию в этот канал. Твой ответ должен быть уникальным, лаконичным, не должен содержать ничего кроме заголовка новости и текста новости без даты.'
-    if random.randint(1, 6) == 1:
-        lore += ' Ты также можешь призывать читателей оставлять комментарии.'
+    new_tags = [
+        'спорт', 'финансы', 'технологии', 'международные отношения', 'политика', 'общество', 'наука',
+        'красота и здоровье', 'шоу-бизнес', 'компьютерные игры', 'погода', 'мнения', 'астрология', 'туризм',
+        'военные действия', 'культура', 'фильмы и сериалы', 'интервью', 'историческая правда', 'проишествия',
+        'власть', 'образование', 'криминал', 'разоблачение', 'благотворительность', 'мода', 'ИТ-технологии',
+        'кибербезопасность', 'изменение климата', 'медицина', 'выборы', 'коррупция', 'развлечения',
+        'социальные сети', 'мистика', 'кулинария', 'история успеха', 'литература и книги',
+        'развенчивание мифов', 'архитектура и урбанистика', 'беженцы и мигранты', 'аниме', 'терроризм',
+        'археология', 'страшная истории', 'вандализм', 'природа', 'забавная история'
+    ]
+    new_tag = random.choice(new_tags)
+    lore = 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её \
+девиз это "Славься Некославия!". Столица Некославии это город Северодонецк. Главной достопримечательностью города \
+является золотая статуя некокинга сидящего на унитазе. Некославия совершила прорыв в генной инженерии и скрестила кошек \
+с людьми, в результате чего получились некодевочки и некомальчики, которых очень любят некославы. Некодевочки и \
+некомальчики в рамках космической программы Некославии колонизировали Марс и теперь живут там. Некославия в хороших \
+дипломатических отношениях с Украиной, некокинг лично дружит с президентом Украины Зеленским, они часто вместе выпивают \
+в баре. Некодевочки и некомальчики поддерживают Украину в войне с Россией и принимают участвие в боевых действиях на \
+Донбассе в подразделении "Дети Донбасса". Самый популярный энергетик в Некославии называется "розовый монстр". \
+В Некославии используют некомобили - новый вид транспорта, который во всём превосходит обычные машины. Ты администратор \
+новостного канала "Некославач" в телеграмме. Ты пишешь новости про Некославию в этот канал. Твои новости должны быть \
+сенсационными, уникальными, креативными, провокационными, забавными'
     chat_completion = neuro.chat.completions.create(
         messages=[
             {"role": "system",
              "content": lore},
             {"role": "user",
-             "content": f'Напиши новость на тему "{new}". Учти что сегодня {datetime.now().strftime("%d.%m.%Y")}'}
+             "content": f'Напиши новость на тему "{new_tag}". Учти что сегодня {cur_date().strftime("%d.%m.%Y")}, \
+но не добавляй эту дату в текст. Твой ответ должен быть в формате JSON с такими полями: заголовок новости, текст \
+новости. JSON должен соответствовать этой схеме: {json.dumps(New.model_json_schema(), indent=2)}'}
         ],
-        model="llama-3.3-70b-versatile"
+        response_format={"type": "json_object"},
+        model="meta-llama/llama-4-maverick-17b-128e-instruct"
     )
-    response = chat_completion.choices[0].message.content
-    new = new.replace(' ', '_').replace('-', '_')
-    if '\n' in response:
-        mas = response.split('\n')
-        title = mas[0].strip()
-        del mas[0]
-        text = ' '.join(mas).strip()
-        text = f"⚡️<b>{title}</b>\n\n{text}\n\n#{new}"
-    else:
-        text = f"{response}\n\n#{new}"
+    resp = New.model_validate_json(chat_completion.choices[0].message.content)
+    text = f"⚡️<b>{resp.title}</b>\n\n{resp.text}\n\n#{new_tag}"
     bot.send_message(channel, text)
+    chat_completion = neuro.chat.completions.create(
+        messages=[
+            {"role": "system",
+             "content": lore},
+            {"role": "user",
+             "content": f'Составь опрос к новости с таким заголовком: {resp.title}. Опрос должен содержать ровно два \
+варианта ответа. Цель опроса это узнать мнение подписчиков канала касательно определённой темы. Опрос должен быть \
+провокационным чтобы в нём проголосовало как можно больше людей. Твой ответ должен быть в формате JSON с такими \
+полями: вопрос опроса, список из двух вариантов ответа. JSON должен соответствовать этой \
+схеме: {json.dumps(Poll.model_json_schema(), indent=2)}'}
+        ],
+        response_format={"type": "json_object"},
+        model="meta-llama/llama-4-maverick-17b-128e-instruct"
+    )
+    resp = Poll.model_validate_json(chat_completion.choices[0].message.content)
+    bot.send_poll(
+        channel,
+        resp.question,
+        [InputPollOption(resp.options[0]), InputPollOption(resp.options[1])],
+        True
+    )
 
 
 def jobhour():
     r = random.randint(1, 100)
-    cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
+    cur = cur_date()
     if r == 42 and cur.hour > 8:
         m = bot.send_photo(NEKOSLAVIA_CHATID,
                            photo='AgACAgIAAxkBAAMbZqkcVrdd4uf2Aok1WIYOEqRKLPsAApLeMRs0KUhJMW2ULgABMKmXAQADAgADeAADNQQ')
@@ -893,7 +936,7 @@ def jobweek():
         'CAACAgIAAxkBAAELHSBlmy5zlVJNQ1kpJjzLqRJpzvq9XgACWxcAAomDiUu7YG_wPShz4zQE',
         'CAACAgIAAxkBAAELHSJlmy53dhqy1F0QGZbSQV0yWhdL8gACoBYAAgwTgUsYv06y1Bvz1DQE'
     ]
-    cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
+    cur = cur_date()
     year_stickers = [
         (20, 10, 'CAACAgIAAxkBAAEKiXplLTbsgpfjAo5uSvlAephSFbLDzAACYz4AAnnqaUmMWJC_jc4g1zAE'),
         (11, 9, 'CAACAgIAAxkBAAEMhVRmnGqkCQ0Xd_Mxr7dV4Srmo7SOUgACTkgAAmEJ6UgJ1BtXpz2UCjUE'),

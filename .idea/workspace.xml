@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="10c6a48e-40d8-41ff-bdb6-ff0214d0397a" name="Changes" comment="Some commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,8 +110,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
-        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26053.29" />
+        <option value="bundled-python-sdk-b1dbf8ef85a6-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26053.29" />
       </set>
     </attachedChunks>
   </component>
@@ -188,15 +189,12 @@
       <workItem from="1741109203993" duration="2000" />
       <workItem from="1741109673631" duration="62000" />
       <workItem from="1741199734847" duration="41000" />
-      <workItem from="1741458440717" duration="490000" />
-    </task>
-    <task id="LOCAL-00005" summary="Some commit">
-      <option name="closed" value="true" />
-      <created>1733444544350</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1733444544350</updated>
+      <workItem from="1741458440717" duration="739000" />
+      <workItem from="1742178887586" duration="314000" />
+      <workItem from="1742526307267" duration="1639000" />
+      <workItem from="1743223333474" duration="57000" />
+      <workItem from="1743302683861" duration="22000" />
+      <workItem from="1744240729443" duration="7493000" />
     </task>
     <task id="LOCAL-00006" summary="Some commit">
       <option name="closed" value="true" />
@@ -582,7 +580,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741199767034</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Some commit">
+      <option name="closed" value="true" />
+      <created>1741459092136</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1741459092136</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
