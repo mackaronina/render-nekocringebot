@@ -795,7 +795,7 @@ def jobnews(channel=-1002426494412):
         model="meta-llama/llama-4-maverick-17b-128e-instruct"
     )
     resp = New.model_validate_json(chat_completion.choices[0].message.content)
-    text = f"⚡️<b>{resp.title}</b>\n\n{resp.text}\n\n#{new_tag}"
+    text = f"⚡️<b>{resp.title}</b>\n\n{resp.text}\n\n#{'_'.join(new_tag.split())}"
     bot.send_message(channel, text)
     chat_completion = neuro.chat.completions.create(
         messages=[
