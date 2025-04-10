@@ -792,7 +792,8 @@ def jobnews(channel=-1002426494412):
 новости. JSON должен соответствовать этой схеме: {json.dumps(New.model_json_schema(), indent=2)}'}
         ],
         response_format={"type": "json_object"},
-        model="meta-llama/llama-4-maverick-17b-128e-instruct"
+        model="meta-llama/llama-4-maverick-17b-128e-instruct",
+        temperature=1.2
     )
     resp = New.model_validate_json(chat_completion.choices[0].message.content)
     text = f"⚡️<b>{resp.title}</b>\n\n{resp.text}\n\n#{'_'.join(new_tag.split())}"
@@ -809,7 +810,8 @@ def jobnews(channel=-1002426494412):
 схеме: {json.dumps(Poll.model_json_schema(), indent=2)}'}
         ],
         response_format={"type": "json_object"},
-        model="meta-llama/llama-4-maverick-17b-128e-instruct"
+        model="meta-llama/llama-4-maverick-17b-128e-instruct",
+        temperature=1.2
     )
     resp = Poll.model_validate_json(chat_completion.choices[0].message.content)
     bot.send_poll(
