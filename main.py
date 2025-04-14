@@ -10,7 +10,6 @@ import traceback
 from datetime import datetime
 from io import BytesIO, StringIO
 from threading import Thread
-from typing import List
 
 import schedule
 import telebot
@@ -18,13 +17,12 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from bs4 import BeautifulSoup
 from curl_cffi import requests, CurlMime
 from flask import Flask, request, send_file, jsonify, render_template, send_from_directory
-from groq import Groq, BaseModel
+from groq import Groq
 from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from pytgcalls import PyTgCalls
 from sqlalchemy import create_engine
 from telebot import types, apihelper
-from telebot.types import InputPollOption
 from telegraph import Telegraph
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
@@ -316,11 +314,6 @@ def msg_monster(message):
 def msg_del(message):
     bot.delete_message(chat_id=message.chat.id, message_id=message.reply_to_message.id)
     bot.delete_message(chat_id=message.chat.id, message_id=message.id)
-
-
-@bot.message_handler(commands=["abobus"])
-def msg_abobus(message):
-    jobnews(SERVICE_CHATID)
 
 
 @bot.message_handler(commands=["pet"])
@@ -748,81 +741,6 @@ def jobday():
         bot.send_message(NEKOSLAVIA_CHATID, text, reply_markup=keyboard)
 
 
-class New(BaseModel):
-    title: str
-    text: str
-
-
-class Poll(BaseModel):
-    question: str
-    options: List[str]
-
-
-def jobnews(channel=-1002426494412):
-    # пост в канал
-    new_tags = [
-        'спорт', 'финансы', 'технологии', 'международные отношения', 'политика', 'общество', 'наука',
-        'красота и здоровье', 'шоу-бизнес', 'компьютерные игры', 'погода', 'мнения', 'астрология', 'туризм',
-        'военные действия', 'культура', 'фильмы и сериалы', 'интервью', 'историческая правда', 'проишествия',
-        'власть', 'образование', 'криминал', 'разоблачение', 'благотворительность', 'мода', 'ИТ-технологии',
-        'кибербезопасность', 'изменение климата', 'медицина', 'выборы', 'коррупция', 'развлечения',
-        'социальные сети', 'мистика', 'кулинария', 'история успеха', 'литература и книги',
-        'развенчивание мифов', 'архитектура и урбанистика', 'беженцы и мигранты', 'аниме', 'терроризм',
-        'археология', 'страшная история', 'природа', 'забавная история', 'криптовалюта', 'лайфхаки',
-        'инсайдерская информация'
-    ]
-    new_tag = random.choice(new_tags)
-    lore = 'Некославия это крайне развитая страна, граждан которой называют некославы, а мудрого правителя некокинг, её \
-девиз это "Славься Некославия!". Валюта Некославии это некогривна. Столица Некославии это город Северодонецк. Главной \
-достопримечательностью города является золотая статуя некокинга сидящего на унитазе. Некославия совершила прорыв в \
-генной инженерии и скрестила кошек с людьми, в результате чего получились некодевочки и некомальчики, которых очень \
-любят некославы. Некодевочки и некомальчики в рамках космической программы Некославии колонизировали Марс и теперь \
-живут там. Некославия в хороших дипломатических отношениях с Украиной, некокинг лично дружит с президентом Украины \
-Зеленским, они часто вместе выпивают в баре. Некодевочки и некомальчики поддерживают Украину в войне с Россией и \
-принимают участвие в боевых действиях на Донбассе в подразделении "Дети Донбасса". Самый популярный энергетик в \
-Некославии называется "розовый монстр". В Некославии используют некомобили - новый вид транспорта, который во всём \
-превосходит обычные машины. Ты администратор новостного канала "Некославач" в телеграмме. Ты пишешь новости про \
-Некославию в этот канал. Твои новости должны быть сенсационными, уникальными, креативными, провокационными, забавными'
-    chat_completion = neuro.chat.completions.create(
-        messages=[
-            {"role": "system",
-             "content": lore},
-            {"role": "user",
-             "content": f'Напиши новость на тему "{new_tag}". Учти что сегодня {cur_date().strftime("%d.%m.%Y")}, \
-но не добавляй эту дату в текст. Твой ответ должен быть в формате JSON с такими полями: заголовок новости, текст \
-новости. JSON должен соответствовать этой схеме: {json.dumps(New.model_json_schema(), indent=2)}'}
-        ],
-        response_format={"type": "json_object"},
-        model="meta-llama/llama-4-maverick-17b-128e-instruct",
-        temperature=1.2
-    )
-    resp = New.model_validate_json(chat_completion.choices[0].message.content)
-    text = f"⚡️<b>{resp.title}</b>\n\n{resp.text}\n\n#{new_tag.replace(' ', '_').replace('-', '_')}"
-    bot.send_message(channel, text)
-    chat_completion = neuro.chat.completions.create(
-        messages=[
-            {"role": "system",
-             "content": lore},
-            {"role": "user",
-             "content": f'Составь опрос к новости с таким заголовком: {resp.title}. Опрос должен содержать ровно два \
-варианта ответа. Цель опроса это узнать мнение подписчиков канала касательно определённой темы. Опрос должен быть \
-провокационным чтобы в нём проголосовало как можно больше людей. Твой ответ должен быть в формате JSON с такими \
-полями: вопрос опроса, список из двух вариантов ответа. JSON должен соответствовать этой \
-схеме: {json.dumps(Poll.model_json_schema(), indent=2)}'}
-        ],
-        response_format={"type": "json_object"},
-        model="meta-llama/llama-4-maverick-17b-128e-instruct",
-        temperature=1.2
-    )
-    resp = Poll.model_validate_json(chat_completion.choices[0].message.content)
-    bot.send_poll(
-        channel,
-        resp.question,
-        [InputPollOption(resp.options[0][:100]), InputPollOption(resp.options[1][:100])],
-        True
-    )
-
-
 def jobhour():
     r = random.randint(1, 100)
     cur = cur_date()
@@ -1007,7 +925,6 @@ if __name__ == '__main__':
     schedule.every().day.at("05:01").do(jobday)
     schedule.every(60).minutes.do(jobhour)
     schedule.every(2).minutes.do(lambda: asyncio.run(jobcheckcall()))
-    schedule.every(12).hours.do(jobnews)
     Thread(target=updater).start()
     bot.send_message(ME_CHATID, 'Запущено')
     app.run(host='0.0.0.0', port=80, threaded=True)
